@@ -1,0 +1,12 @@
+.idea
+
+server/venv/
+server/config.ini
+
+server/*.pyc
+server/__pycache__/
+server/conversation_analysis/__pycache__/
+server/extractors/__pycache__/
+server/resources/__pycache__
+server/temp/
+server/model/
