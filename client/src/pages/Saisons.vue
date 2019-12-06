@@ -1,8 +1,31 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <card title="Evolution des tirs au fil des saisons" subTitle="">
-      <LineChart :chartdata="chartData" :options="options" v-if="chartData != null"/>
+  <div>
+    <div class="row">
+      <div class="col-6">
+        <card title="Evolution des buts au fil des saisons" subTitle="">
+          <LineChart :chartdata="chartButsData" :options="options" v-if="chartButsData != null"/>
+        </card>
+      </div>
+      <div class="col-6">
+        <card title="Evolution du nombre de bagarres par saison" subTitle="">
+          <LineChart :chartdata="chartBagarresData" :options="options" v-if="chartBagarresData != null"/>
+        </card>
+      </div>
+    </div>
+    <div class="row">
+      <card title="Comparaison match régulier vs playoff pour une saison">
+        Choisissez une saison:
+        <select v-model="current_saison">
+          <option>2010-2011</option>
+          <option>2011-2012</option>
+          <option>2012-2013</option>
+          <option>2013-2014</option>
+          <option>2014-2015</option>
+          <option>2015-2016</option>
+          <option>2016-2017</option>
+          <option>2017-2018</option>
+          <option selected>2018-2019</option>
+        </select>
       </card>
     </div>
   </div>
@@ -19,22 +42,40 @@
     },
     data() {
       return {
-        chartData: null,
-        options: null
+        chartButsData: null,
+        chartBagarresData: null,
+        options: null,
+        saisons_options: [
+          {value: '2010', text: '2010-2011'},
+          {value: '2011', text: '2011-2012'},
+          {value: '2012', text: '2012-2013'},
+          {value: '2013', text: '2013-2014'},
+          {value: '2014', text: '2014-2015'},
+          {value: '2015', text: '2015-2016'},
+          {value: '2016', text: '2016-2017'},
+          {value: '2017', text: '2017-2018'},
+          {value: '2018', text: '2018-2019'}
+        ],
+        current_saison: "2018-2019"
       }
     },
     mounted() {
-      this.chartData = {
-        labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
+      this.chartButsData = {
+        labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017"],
         datasets: [{
-          data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
-          label: "Africa",
+          data: [3.04, 2.13, 2.88, 3.14, 3.30, 3.55],
+          label: "Moyenne de buts par match",
           borderColor: "#3e95cd",
           fill: false
-        }, {
-          data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
-          label: "Asia",
-          borderColor: "#8e5ea2",
+        }
+        ]
+      };
+      this.chartBagarresData = {
+        labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017"],
+        datasets: [{
+          data: [279, 254, 248, 244, 220, 198],
+          label: "Moyenne de buts par match",
+          borderColor: "#3e95cd",
           fill: false
         }
         ]
