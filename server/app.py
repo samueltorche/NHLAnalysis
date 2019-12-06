@@ -10,6 +10,8 @@ from bson.objectid import ObjectId
 def newEncoder(o):
     if type(o) == ObjectId:
         return str(o)
+    if isinstance(o, ObjectId):
+            return str(o)
     return o.__str__
 
 
@@ -54,6 +56,11 @@ def get_game_match(game_id):
 @app.route('/season/avg_goal')
 def get_season_avg_goal():
     data = nhl.get_season_goal_average(games_collection)
+    return json.dumps(data)
+
+@app.route('/games_plays/compare/<season>')
+def get_compare_playoff_season(season):
+    data = nhl.compare_playoff_season(game_plays_collection, season)
     return json.dumps(data)
 
 
