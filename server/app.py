@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import re
+import nhl
 
 
 import json
@@ -20,7 +21,9 @@ client = MongoClient()
 db = client.nhl
 
 
+
 game_plays_collection = db['game_plays']
+games_collection = db['game']
 
 
 app = Flask(__name__)
@@ -29,6 +32,7 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
+    
     return 'Hello World!'
 
 
@@ -42,5 +46,29 @@ def get_game_plays_season(year):
     return json.dumps(list(game_plays_collection.find({'play_id':regx})), default=newEncoder )
 
 
+@app.route('/game_plays/games/<game_id>')
+def get_game_match(game_id):
+    return json.dumps(list(game_plays_collection.find({'game_id':int(game_id)})), default=newEncoder )
+
+
+@app.route('/season/avg_goal')
+def get_season_avg_goal():
+    data = nhl.get_season_goal_average(games_collection)
+    return json.dumps(data)
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
