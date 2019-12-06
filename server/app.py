@@ -60,7 +60,7 @@ def get_season_avg_goal():
 
 @app.route('/games_plays/compare/<season>')
 def get_compare_playoff_season(season):
-    data = nhl.compare_playoff_season(game_plays_collection, season)
+    data = nhl.compare_playoff_season(game_plays_collection, games_collection,season)
     return json.dumps(data)
 
 
