@@ -61,7 +61,9 @@ def get_season_avg_goal():
 
 @app.route('/season/avg_fights')
 def get_season_avg_fights():
+    print("Request start")
     data = nhl.get_season_fights_average()
+    print("Request end")
     return json.dumps(data)
 
 
