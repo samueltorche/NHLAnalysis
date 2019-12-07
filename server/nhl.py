@@ -7,6 +7,10 @@ game_plays_collection = db['game_plays']
 games_collection = db['game']
 
 
+seasons_to_eval = [20102011, 20112012, 20122013, 20132014, 20142015, 20152016, 20162017, 20172018, 20182019]
+number_of_games_per_season = [1319, 1316, 806, 1323, 1319, 1321, 1317, 1355, 1358]
+
+
 def compare_playoff_season(plays, games,season):
     regx = re.compile("^"+season[:4], re.IGNORECASE)
     playoff = games.aggregate([
@@ -145,17 +149,14 @@ def get_season_goal_average(col):
 
 
 def get_season_fights_average():
-    seasons_to_eval = ["20102011", "20112012", "20122013", "20132014", "20142015", "20152016", "20162017", "20172018", "20182019"]
     data = []
     for season in seasons_to_eval:
         list_of_games = games_collection.find({"season": season})
         print("loop season")
         nbr_of_fights = 0
         for game in list_of_games:
-            print("loop games")
             list_of_plays = game_plays_collection.find({"game_id": game["game_id"]})
             for play in list_of_plays:
-                print("loop plays")
                 if play["secondaryType"] == "Fighting":
                     nbr_of_fights += 1
         obj = {
