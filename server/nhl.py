@@ -49,7 +49,9 @@ def compare_playoff_season(plays, games,season):
                 "goals_count": 1,
                 "avg": { "$divide": ["$goals_count", "$game_count"] }
             } 
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])
     regular = games.aggregate([
         {
@@ -79,7 +81,9 @@ def compare_playoff_season(plays, games,season):
                 "goals_count": 1,
                 "avg": { "$divide": ["$goals_count", "$game_count"] }
             } 
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])
     playoff_plays = plays.aggregate([
         {
@@ -117,7 +121,9 @@ def compare_playoff_season(plays, games,season):
                 "_id": "$event",
                 "count" : {"$sum": 1}
             }
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])    
 
     regular_plays = plays.aggregate([
@@ -156,7 +162,9 @@ def compare_playoff_season(plays, games,season):
                 "_id": "$event",
                 "count" : {"$sum": 1}
             }
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])
 
     playoff_plays_sec = plays.aggregate([
@@ -197,7 +205,9 @@ def compare_playoff_season(plays, games,season):
                 "_id": "$secondaryType",
                 "count" : {"$sum": 1}
             }
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])    
 
     regular_plays_sec = plays.aggregate([
@@ -238,7 +248,9 @@ def compare_playoff_season(plays, games,season):
                 "_id": "$secondaryType",
                 "count" : {"$sum": 1}
             }
-        }
+        },
+
+         { "$sort" : { "_id" : 1} }
     ])    
 
     _json = { "R": list(regular),
@@ -271,42 +283,6 @@ def compare_playoff_season(plays, games,season):
 
     with open(filename, 'w') as outfile:
         json.dump(_json, outfile)
-    '''
-    res = col.aggregate([
-        {
-            "$match":
-            {
-                "play_id": { "$regex": regx} 
-            }
-        },
-
-        {
-            "$lookup": 
-            {
-              "from": 'game',
-              "localField": 'game_id',
-              "foreignField": 'game_id',
-              "as": 'lgame'
-            } 
-        },
-        {
-            "$match":
-            {
-                "lgame.type": "P"
-            }
-        },
-
-        {
-            "$project":
-            {   
-                "play_id": 1,
-                "event": 1,
-                "home_g" : "$lgame.home_goals",
-                "away_goals": "$lgame.away_goals",
-                "gameType": "$lgame.type"
-            }
-        }
-    ])'''
 
     return(_json)
 

@@ -62,7 +62,7 @@
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
         },
-        chartRegularPlayoff_loaded: true,
+        chartRegularPlayoff_loaded: false,
         options: {
           responsive: true,
           maintainAspectRatio: false
@@ -109,22 +109,7 @@
           }
           ]
         };
-        this.chartRegularPlayoffData = {
-          labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
-          datasets: [{
-            data: [279, 254, 248, 244],
-            label: "Match régulier",
-            borderColor: "#3e95cd",
-            fill: false
-          },
-          {
-            data: [229, 554, 238, 444],
-            label: "Playoff",
-            borderColor: "#7c0a02",
-            fill: false
-          }
-          ]
-        };
+  
         // GET AVG SEASON GOALS
         axios.get(this.$serverUrl + '/season/avg_goal').then(response => {
           console.log(response.data);
@@ -175,6 +160,77 @@
         }).catch(error => {
           console.log(error);
         });
+
+        // GET PLAYOFF REGULAR COMPARAISON
+        let labels = ['Goal', 'Penalty', 'Shot', 'Faceoff', 'Blocked Shot', 'Hit',"Interference"]
+        axios.get(this.$serverUrl + '/games_plays/compare/20102011')
+        .then(response => {
+            let rp = response.data['RP']
+            let pp = response.data['PP']
+            let rp2 = response.data['RPSecondary']
+            let pp2 = response.data['PPSecondary']
+
+            let playoff_data = []
+            let regular_data = []
+            for(let idx in pp) {
+              let p_line = pp[idx]
+              let i = labels.indexOf(p_line['_id'])
+              if(i>=0) {
+                playoff_data[i] = p_line['count']
+              }
+            }
+            console.log('rp2', rp2)
+            for(let idx in rp) {
+              let r_line = rp[idx]
+              let i = labels.indexOf(r_line['_id'])
+              console.log('i', i)
+              if(i>=0) {
+                regular_data[i] = r_line['count']
+              }
+            }
+
+            for(let idx in rp2) {
+              let r_line = rp2[idx]
+              let i = labels.indexOf(r_line['_id'])
+              console.log('i', i)
+              if(i>=0) {
+                regular_data[i] = r_line['count']
+              }
+            }
+
+            for(let idx in pp2) {
+              let r_line = pp2[idx]
+              let i = labels.indexOf(r_line['_id'])
+              console.log('i', i)
+              if(i>=0) {
+                playoff_data[i] = r_line['count']
+              }
+            }
+
+
+            let new_data = [{
+                data: regular_data,
+                label: "Match régulier",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              {
+                data: playoff_data,
+                label: "Playoff",
+                borderColor: "#7c0a02",
+                fill: false
+              }
+            ]
+            this.$set(this.chartRegularPlayoffData, 'datasets' , new_data);
+            this.$set(this.chartRegularPlayoffData, 'labels' , labels);
+            this.chartRegularPlayoff_loaded = true;
+            
+
+        })  // END AXIOS THEN 
+
+
+
+
       }
     }
   }
