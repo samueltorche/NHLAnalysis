@@ -1,4 +1,6 @@
 import re
+import json
+import os
 from pymongo import MongoClient
 client = MongoClient()
 db = client.nhl
@@ -6,13 +8,17 @@ db = client.nhl
 game_plays_collection = db['game_plays']
 games_collection = db['game']
 
-
 seasons_to_eval = [20102011, 20112012, 20122013, 20132014, 20142015, 20152016, 20162017, 20172018, 20182019]
 number_of_games_per_season = [1319, 1316, 806, 1323, 1319, 1321, 1317, 1355, 1358]
 
 
 def compare_playoff_season(plays, games,season):
     regx = re.compile("^"+season[:4], re.IGNORECASE)
+    filename = 'compare_' + season +".json"
+    if os.path.exists(filename):
+        with open(filename) as json_file:
+            return json.load(json_file)
+
     playoff = games.aggregate([
         {
             "$match":
@@ -73,10 +79,92 @@ def compare_playoff_season(plays, games,season):
             } 
         }
     ])
-
-    json = { "R": list(regular),
-             "P": list(playoff)
+    playoff_plays = plays.aggregate([
+        {
+        "$match":
+            {
+                "play_id": { "$regex": regx} 
             }
+        },
+
+        {
+            "$lookup": 
+            {
+              "from": 'game',
+              "localField": 'game_id',
+              "foreignField": 'game_id',
+              "as": 'lgame'
+            } 
+        },
+        {
+            "$match":
+            {
+                "lgame.type": "P"
+            }
+        },
+
+        {
+            "$project":
+            {   
+                "event": 1,
+            }
+        },
+        {
+            "$group":
+            {
+                "_id": "$event",
+                "count" : {"$sum": 1}
+            }
+        }
+    ])    
+
+    regular_plays = plays.aggregate([
+        {
+        "$match":
+            {
+                "play_id": { "$regex": regx} 
+            }
+        },
+
+        {
+            "$lookup": 
+            {
+              "from": 'game',
+              "localField": 'game_id',
+              "foreignField": 'game_id',
+              "as": 'lgame'
+            } 
+        },
+        {
+            "$match":
+            {
+                "lgame.type": "R"
+            }
+        },
+
+        {
+            "$project":
+            {   
+                "event": 1,
+            }
+        },
+        {
+            "$group":
+            {
+                "_id": "$event",
+                "count" : {"$sum": 1}
+            }
+        }
+    ])
+
+    _json = { "R": list(regular),
+             "P": list(playoff),
+             "PP": list(playoff_plays),
+             "RP": list(regular_plays)
+            }
+
+    with open(filename, 'w') as outfile:
+        json.dump(_json, outfile)
     '''
     res = col.aggregate([
         {
@@ -114,7 +202,7 @@ def compare_playoff_season(plays, games,season):
         }
     ])'''
 
-    return(json)
+    return(_json)
 
 
 def get_season_goal_average(col):
