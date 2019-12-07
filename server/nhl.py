@@ -13,7 +13,8 @@ def compare_playoff_season(plays, games,season):
     filename = 'compare_' + season +".json"
     if os.path.exists(filename):
         with open(filename) as json_file:
-            return json.load(json_file)
+            _json = json.load(json_file)
+            return _json
 
     playoff = games.aggregate([
         {
@@ -158,6 +159,18 @@ def compare_playoff_season(plays, games,season):
              "PP": list(playoff_plays),
              "RP": list(regular_plays)
             }
+
+    playoff = _json['P']
+    playoff_plays = _json['PP']
+    playoff_gc = playoff[0]['game_count']
+    for el in playoff_plays:
+        el['count'] = el['count']/playoff_gc
+
+    regular = _json['R']
+    regular_plays = _json['RP']
+    regular_gc = regular[0]['game_count']
+    for el in regular_plays:
+        el['count'] = el['count']/regular_gc
 
     with open(filename, 'w') as outfile:
         json.dump(_json, outfile)
