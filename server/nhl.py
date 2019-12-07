@@ -14,6 +14,7 @@ number_of_games_per_season = [1319, 1316, 806, 1323, 1319, 1321, 1317, 1355, 135
 
 def compare_playoff_season(plays, games,season):
     regx = re.compile("^"+season[:4], re.IGNORECASE)
+    regx2 = re.compile(".", re.IGNORECASE)
     filename = 'compare_' + season +".json"
     if os.path.exists(filename):
         with open(filename) as json_file:
@@ -158,10 +159,94 @@ def compare_playoff_season(plays, games,season):
         }
     ])
 
+    playoff_plays_sec = plays.aggregate([
+        {
+        "$match":
+            {
+                "secondaryType": {"$regex": regx2},
+                "play_id": { "$regex": regx} 
+            }
+        },
+
+        {
+            "$lookup": 
+            {
+              "from": 'game',
+              "localField": 'game_id',
+              "foreignField": 'game_id',
+              "as": 'lgame'
+            } 
+        },
+        {
+            "$match":
+            {
+                "lgame.type": "P"
+            }
+        },
+
+        {
+            "$project":
+            {   
+                "event": 1,
+                "secondaryType": 1
+            }
+        },
+        {
+            "$group":
+            {
+                "_id": "$secondaryType",
+                "count" : {"$sum": 1}
+            }
+        }
+    ])    
+
+    regular_plays_sec = plays.aggregate([
+        {
+        "$match":
+            {
+                "secondaryType": {"$regex": regx2},
+                "play_id": { "$regex": regx} 
+            }
+        },
+
+        {
+            "$lookup": 
+            {
+              "from": 'game',
+              "localField": 'game_id',
+              "foreignField": 'game_id',
+              "as": 'lgame'
+            } 
+        },
+        {
+            "$match":
+            {
+                "lgame.type": "R"
+            }
+        },
+
+        {
+            "$project":
+            {   
+                "event": 1,
+                "secondaryType": 1
+            }
+        },
+        {
+            "$group":
+            {
+                "_id": "$secondaryType",
+                "count" : {"$sum": 1}
+            }
+        }
+    ])    
+
     _json = { "R": list(regular),
              "P": list(playoff),
              "PP": list(playoff_plays),
-             "RP": list(regular_plays)
+             "RP": list(regular_plays),
+             "PPSecondary": list(playoff_plays_sec),
+             "RPSecondary": list(regular_plays_sec),
             }
 
     playoff = _json['P']
