@@ -1,6 +1,13 @@
 import re
 import json
 import os
+from pymongo import MongoClient
+client = MongoClient()
+db = client.nhl
+
+game_plays_collection = db['game_plays']
+games_collection = db['game']
+
 def compare_playoff_season(plays, games,season):
     regx = re.compile("^"+season[:4], re.IGNORECASE)
     filename = 'compare_' + season +".json"
@@ -223,4 +230,26 @@ def get_season_goal_average(col):
          { "$sort" : { "_id" : 1} }
     ])
     return(list(res))
- 
+
+
+def get_season_fights_average():
+    seasons_to_eval = ["20102011", "20112012", "20122013", "20132014", "20142015", "20152016", "20162017", "20172018", "20182019"]
+    data = []
+    for season in seasons_to_eval:
+        list_of_games = games_collection.find({"season": season})
+        print("loop season")
+        nbr_of_fights = 0
+        for game in list_of_games:
+            print("loop games")
+            list_of_plays = game_plays_collection.find({"game_id": game["game_id"]})
+            for play in list_of_plays:
+                print("loop plays")
+                if play["secondaryType"] == "Fighting":
+                    nbr_of_fights += 1
+        obj = {
+            "season": season,
+            "fights": nbr_of_fights
+        }
+        data.append(obj)
+    print(data)
+    return data

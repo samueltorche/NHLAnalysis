@@ -57,7 +57,7 @@
           labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
-        chartBagarres_loaded: true,
+        chartBagarres_loaded: false,
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
@@ -125,6 +125,7 @@
           }
           ]
         };
+        // GET AVG SEASON GOALS
         axios.get(this.$serverUrl + '/season/avg_goal').then(response => {
           console.log(response.data);
           let new_data = [
@@ -146,6 +147,31 @@
           }];
           this.$set(this.chartButsData, 'datasets', newvalue);
           this.chartButs_loaded = true;
+        }).catch(error => {
+          console.log(error);
+        });
+        //GET AVG NBR OF FIGHTS BY SEASON
+        axios.get(this.$serverUrl + '/season/avg_fights').then(response => {
+          console.log(response.data);
+          let new_data = [
+            response.data[0].fights,
+            response.data[1].fights,
+            response.data[2].fights,
+            response.data[3].fights,
+            response.data[4].fights,
+            response.data[5].fights,
+            response.data[6].fights,
+            response.data[7].fights,
+            response.data[8].fights,
+          ];
+          let newvalue = [{
+            data: new_data,
+            label: "Nombre de bagarres par saisons",
+            borderColor: "#3e95cd",
+            fill: false
+          }];
+          this.$set(this.chartBagarresData, 'datasets', newvalue);
+          this.chartBagarres_loaded = true;
         }).catch(error => {
           console.log(error);
         });

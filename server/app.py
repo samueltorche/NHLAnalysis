@@ -58,6 +58,13 @@ def get_season_avg_goal():
     data = nhl.get_season_goal_average(games_collection)
     return json.dumps(data)
 
+
+@app.route('/season/avg_fights')
+def get_season_avg_fights():
+    data = nhl.get_season_fights_average()
+    return json.dumps(data)
+
+
 @app.route('/games_plays/compare/<season>')
 def get_compare_playoff_season(season):
     data = nhl.compare_playoff_season(game_plays_collection, games_collection,season)
@@ -65,7 +72,7 @@ def get_compare_playoff_season(season):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host= '0.0.0.0')
 
 
 
