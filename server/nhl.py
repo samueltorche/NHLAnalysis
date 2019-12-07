@@ -149,10 +149,13 @@ def get_season_fights_average():
     data = []
     for season in seasons_to_eval:
         list_of_games = games_collection.find({"season": season})
+        print("loop season")
         nbr_of_fights = 0
         for game in list_of_games:
+            print("loop games")
             list_of_plays = game_plays_collection.find({"game_id": game["game_id"]})
             for play in list_of_plays:
+                print("loop plays")
                 if play["secondaryType"] == "Fighting":
                     nbr_of_fights += 1
         obj = {
