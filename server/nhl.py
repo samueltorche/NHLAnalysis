@@ -255,6 +255,14 @@ def compare_playoff_season(plays, games,season):
     for el in playoff_plays:
         el['count'] = el['count']/playoff_gc
 
+    playoff_plays_s = _json['PPSecondary']
+    for el in playoff_plays_s:
+        el['count'] = el['count']/playoff_gc
+
+    regular_plays_s = _json['RPSecondary']
+    for el in regular_plays_s:
+        el['count'] = el['count']/playoff_gc
+
     regular = _json['R']
     regular_plays = _json['RP']
     regular_gc = regular[0]['game_count']
