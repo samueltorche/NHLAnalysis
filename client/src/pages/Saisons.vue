@@ -30,6 +30,18 @@
         <RadarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoff_loaded"/>
       </card>
     </div>
+    <div class="row">
+      <div class="col-6">
+        <card title="Evolution des buts des meilleurs joueurs" subTitle="">
+          <LineChart :chartdata="chartPlayerData" :options="options" v-if="chartPlayerData_loaded"/>
+        </card>
+      </div>
+      <div class="col-6">
+        <card title="Evolution du temps de jeu des joueurs" subTitle="">
+          <LineChart :chartdata="chartPlayerTimeData" :options="options" v-if="chartPlayerTimeData_loaded"/>
+        </card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,6 +61,16 @@
     data() {
       return {
         chartButsData: {
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          datasets: [{}]
+        },
+        chartPlayerData_loaded: false,
+        chartPlayerData: {
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          datasets: [{}]
+        },
+        chartPlayerTimeData_loaded: false,
+        chartPlayerTimeData: {
           labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
@@ -179,11 +201,9 @@
                 playoff_data[i] = p_line['count']
               }
             }
-            console.log('rp2', rp2)
             for(let idx in rp) {
               let r_line = rp[idx]
               let i = labels.indexOf(r_line['_id'])
-              console.log('i', i)
               if(i>=0) {
                 regular_data[i] = r_line['count']
               }
@@ -192,7 +212,6 @@
             for(let idx in rp2) {
               let r_line = rp2[idx]
               let i = labels.indexOf(r_line['_id'])
-              console.log('i', i)
               if(i>=0) {
                 regular_data[i] = r_line['count']
               }
@@ -201,7 +220,6 @@
             for(let idx in pp2) {
               let r_line = pp2[idx]
               let i = labels.indexOf(r_line['_id'])
-              console.log('i', i)
               if(i>=0) {
                 playoff_data[i] = r_line['count']
               }
@@ -228,6 +246,79 @@
 
         })  // END AXIOS THEN 
 
+
+        // GET PLAYERS STATS
+        axios.get(this.$serverUrl + '/player_stats')
+        .then(response => {
+            let players_data = []
+            let goals = []
+            let timeOnIce = []
+
+            for(let s in response.data){
+              let players = response.data[s]
+              for(let p in players) {
+                let player = players[p][0]
+                let pid = player['_id']
+                players_data[pid] = {
+                  "time": [], 
+                  "goals": [],
+                  "color": ""
+                }
+              }
+            }
+
+            var rcolor = function() {
+              var r = Math.floor(Math.random() * 255);
+              var g = Math.floor(Math.random() * 255);
+              var b = Math.floor(Math.random() * 255);
+              return "rgb(" + r + "," + g + "," + b + ")";
+            }
+
+            for(let s in response.data){
+              let players = response.data[s]
+              for(let p in players) {
+                let player = players[p][0]
+                let pid = player['_id']
+                players_data[pid]['time'].push(
+                player['timeOnIce'])
+                players_data[pid]['color'] = rcolor()
+                players_data[pid]['goals'].push(player['goals'])
+              }
+            }
+
+            console.log(players_data)
+
+            let datas = []
+            for(let p in players_data){
+              let player_data = players_data[p]
+              let d = {
+                "data": player_data['goals'],
+                "label": p,
+                "borderColor": player_data['color'],
+                "fill": false
+              }
+              datas.push(d)
+            }
+
+            this.$set(this.chartPlayerData, 'datasets' , datas);
+            this.chartPlayerData_loaded = true;
+
+            datas = []
+            for(let p in players_data){
+              let player_data = players_data[p]
+              let d = {
+                "data": player_data['time'],
+                "label": p,
+                "borderColor": player_data['color'],
+                "fill": false
+              }
+              datas.push(d)
+            }
+
+            this.$set(this.chartPlayerTimeData, 'datasets' , datas);
+            this.chartPlayerTimeData_loaded = true;
+            
+        })
 
 
 

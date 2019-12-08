@@ -73,6 +73,12 @@ def get_compare_playoff_season(season):
     return json.dumps(data)
 
 
+@app.route('/player_stats')
+def get_players_stats():
+    data = nhl.get_player_details()
+    return json.dumps(data)
+
+
 if __name__ == '__main__':
     app.run(debug=True,host= '0.0.0.0')
 

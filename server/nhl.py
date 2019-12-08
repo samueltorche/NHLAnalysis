@@ -7,6 +7,8 @@ db = client.nhl
 
 game_plays_collection = db['game_plays']
 games_collection = db['game']
+skater_collection = db['shifts']
+players_collection = db['players']
 
 seasons_to_eval = [20102011, 20112012, 20122013, 20132014, 20142015, 20152016, 20162017, 20172018, 20182019]
 number_of_games_per_season = [1319, 1316, 806, 1323, 1319, 1321, 1317, 1355, 1358]
@@ -336,3 +338,62 @@ def get_season_fights_average():
         data.append(obj)
     print(data)
     return data
+
+
+def get_player_details():
+    best_players = [8471214, 8474564, 8474141,8475166, 8470794]
+    seasons = [2010,2011,2012,2013,2014,2015,2016,2017,2018]
+    res = {}
+    for season in seasons:
+        res[season] = {}
+        for bp in best_players:
+            regx = re.compile("^"+str(season), re.IGNORECASE)
+            stats = skater_collection.aggregate([
+                {
+                    "$project":
+                    {
+                      "game_id": { "$toLower": "$game_id" },
+                      "goals": 1,
+                      "timeOnIce": 1,
+                      "player_id": 1
+                    }
+                },
+                {
+                    "$match":
+                    {
+                        "game_id": {"$regex": regx },
+                        "player_id": bp
+                    }
+                },
+
+
+                {
+                    "$group":
+                    {
+                        "_id": "$player_id",
+                        "goals": {"$sum": "$goals"},
+                        "timeOnIce": {"$sum": "$timeOnIce"}
+                    }
+                },
+                {
+                    "$sort":
+                    {
+                        "goals": -1,
+                        "_id": 1
+                    }
+                }
+            ])
+
+            _players = list(stats)
+            for _player in _players: 
+                pid = _player['_id']
+                player = list(players_collection.find({'player_id': pid}))[0]
+                _player['_id'] = player['lastName'] + " " + player['firstName']
+                #_player['_id'] = 10
+
+
+            res[season][bp] = _players
+    return res
+
+
+
