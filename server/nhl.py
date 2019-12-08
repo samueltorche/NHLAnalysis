@@ -419,6 +419,13 @@ def get_avg_nbr_shots():
 
 
 def get_player_details():
+
+    filename = 'player_stats.json'
+    if os.path.exists(filename):
+        with open(filename) as json_file:
+            _json = json.load(json_file)
+            return _json
+
     best_players = [8471214, 8474564, 8474141,8475166, 8470794]
     seasons = [2010,2011,2012,2013,2014,2015,2016,2017,2018]
     res = {}
@@ -471,6 +478,9 @@ def get_player_details():
 
 
             res[season][bp] = _players
+
+    with open(filename, 'w') as outfile:
+        json.dump(res, outfile)
     return res
 
 
