@@ -7,8 +7,18 @@
         </card>
       </div>
       <div class="col-6">
-        <card title="Evolution du nombre de bagarres par saison" subTitle="">
+        <card title="Evolution du nombre de tirs au fil des saisons" subTitle="">
+          <LineChart :chartdata="chartShotsData" :options="options" v-if="chartShots_loaded"/>
+        </card>
+      </div>
+      <div class="col-6">
+        <card title="Evolution des bagarres au fil des saisons" subTitle="">
           <LineChart :chartdata="chartBagarresData" :options="options" v-if="chartBagarres_loaded"/>
+        </card>
+      </div>
+      <div class="col-6">
+        <card title="Evolution des pénalités au fil des saisons" subTitle="">
+          <LineChart :chartdata="chartPenaltiesData" :options="options" v-if="chartPenalties_loaded"/>
         </card>
       </div>
     </div>
@@ -75,11 +85,21 @@
           datasets: [{}]
         },
         chartButs_loaded: false,
+        chartShotsData: {
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          datasets: [{}]
+        },
+        chartShots_loaded: false,
         chartBagarresData: {
           labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartBagarres_loaded: false,
+        chartPenaltiesData: {
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          datasets: [{}]
+        },
+        chartPenalties_loaded: false,
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
@@ -121,17 +141,6 @@
       },
       fetchData() {
         console.log("Fetch data ...");
-        this.chartBagarresData = {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017"],
-          datasets: [{
-            data: [279, 254, 248, 244, 220, 198],
-            label: "Nombre de bagarres",
-            borderColor: "#3e95cd",
-            fill: false
-          }
-          ]
-        };
-  
         // GET AVG SEASON GOALS
         axios.get(this.$serverUrl + '/season/avg_goal').then(response => {
           console.log(response.data);
@@ -157,23 +166,48 @@
         }).catch(error => {
           console.log(error);
         });
+        // GET AVG SEASON SHOTS
+        axios.get(this.$serverUrl + '/season/avg_shots').then(response => {
+          console.log(response.data);
+          let new_data = [
+            response.data[0].shots_avg,
+            response.data[1].shots_avg,
+            response.data[2].shots_avg,
+            response.data[3].shots_avg,
+            response.data[4].shots_avg,
+            response.data[5].shots_avg,
+            response.data[6].shots_avg,
+            response.data[7].shots_avg,
+            response.data[8].shots_avg,
+          ];
+          let newvalue = [{
+            data: new_data,
+            label: "Moyenne de tirs par match",
+            borderColor: "#3e95cd",
+            fill: false
+          }];
+          this.$set(this.chartShotsData, 'datasets', newvalue);
+          this.chartShots_loaded = true;
+        }).catch(error => {
+          console.log(error);
+        });
         //GET AVG NBR OF FIGHTS BY SEASON
         axios.get(this.$serverUrl + '/season/avg_fights').then(response => {
           console.log(response.data);
           let new_data = [
-            response.data[0].fights,
-            response.data[1].fights,
-            response.data[2].fights,
-            response.data[3].fights,
-            response.data[4].fights,
-            response.data[5].fights,
-            response.data[6].fights,
-            response.data[7].fights,
-            response.data[8].fights,
+            response.data[0].fights_avg,
+            response.data[1].fights_avg,
+            response.data[2].fights_avg,
+            response.data[3].fights_avg,
+            response.data[4].fights_avg,
+            response.data[5].fights_avg,
+            response.data[6].fights_avg,
+            response.data[7].fights_avg,
+            response.data[8].fights_avg,
           ];
           let newvalue = [{
             data: new_data,
-            label: "Nombre de bagarres par saisons",
+            label: "Moyenne de bagarres par match",
             borderColor: "#3e95cd",
             fill: false
           }];
@@ -182,7 +216,31 @@
         }).catch(error => {
           console.log(error);
         });
-
+        //GET AVG PENALTIES PER SEASON
+        axios.get(this.$serverUrl + '/season/avg_penalties').then(response => {
+          console.log(response.data);
+          let new_data = [
+            response.data[0].penalties_avg,
+            response.data[1].penalties_avg,
+            response.data[2].penalties_avg,
+            response.data[3].penalties_avg,
+            response.data[4].penalties_avg,
+            response.data[5].penalties_avg,
+            response.data[6].penalties_avg,
+            response.data[7].penalties_avg,
+            response.data[8].penalties_avg,
+          ];
+          let newvalue = [{
+            data: new_data,
+            label: "Moyenne de pénalités par match",
+            borderColor: "#3e95cd",
+            fill: false
+          }];
+          this.$set(this.chartPenaltiesData, 'datasets', newvalue);
+          this.chartPenalties_loaded = true;
+        }).catch(error => {
+          console.log(error);
+        });
         // GET PLAYOFF REGULAR COMPARAISON
         let labels = ['Goal', 'Penalty', 'Shot', 'Faceoff', 'Blocked Shot', 'Hit',"Interference"]
         axios.get(this.$serverUrl + '/games_plays/compare/20102011')
