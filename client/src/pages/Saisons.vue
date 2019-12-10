@@ -23,24 +23,6 @@
       </div>
     </div>
     <div class="row">
-      <card title="Comparaison match régulier vs playoff pour une saison">
-        Choisissez une saison:
-        <select v-model="current_saison">
-          <option>2010-2011</option>
-          <option>2011-2012</option>
-          <option>2012-2013</option>
-          <option>2013-2014</option>
-          <option>2014-2015</option>
-          <option>2015-2016</option>
-          <option>2016-2017</option>
-          <option>2017-2018</option>
-          <option selected>2018-2019</option>
-        </select>
-        <!--<BarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoffData != null"/>-->
-        <RadarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoff_loaded"/>
-      </card>
-    </div>
-    <div class="row">
       <div class="col-6">
         <card title="Evolution des buts des meilleurs joueurs" subTitle="">
           <LineChart :chartdata="chartPlayerData" :options="options" v-if="chartPlayerData_loaded"/>
@@ -59,14 +41,12 @@
   import axios from 'axios';
   import LineChart from '@/pages/LineChart.vue';
   import BarChart from '@/pages/BarChart.vue';
-  import RadarChart from '@/pages/RadarChart.vue';
 
   export default {
     name: "Saisons",
     components: {
       LineChart,
-      BarChart,
-      RadarChart
+      BarChart
     },
     data() {
       return {
@@ -100,11 +80,6 @@
           datasets: [{}]
         },
         chartPenalties_loaded: false,
-        chartRegularPlayoffData: {
-          labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
-          datasets: [{}]
-        },
-        chartRegularPlayoff_loaded: false,
         options: {
           responsive: true,
           maintainAspectRatio: false
@@ -131,14 +106,6 @@
       '$route': 'fetchData'
     },
     methods: {
-      test() {
-        console.log(this.$serverUrl);
-        axios.get(this.$serverUrl + '/').then(response => {
-          console.log(response.data);
-        }).catch(error => {
-          console.log(error);
-        });
-      },
       fetchData() {
         console.log("Fetch data ...");
         // GET AVG SEASON GOALS
@@ -241,69 +208,6 @@
         }).catch(error => {
           console.log(error);
         });
-        // GET PLAYOFF REGULAR COMPARAISON
-        let labels = ['Goal', 'Penalty', 'Shot', 'Faceoff', 'Blocked Shot', 'Hit',"Interference"]
-        axios.get(this.$serverUrl + '/games_plays/compare/20102011')
-        .then(response => {
-            let rp = response.data['RP']
-            let pp = response.data['PP']
-            let rp2 = response.data['RPSecondary']
-            let pp2 = response.data['PPSecondary']
-
-            let playoff_data = []
-            let regular_data = []
-            for(let idx in pp) {
-              let p_line = pp[idx]
-              let i = labels.indexOf(p_line['_id'])
-              if(i>=0) {
-                playoff_data[i] = p_line['count']
-              }
-            }
-            for(let idx in rp) {
-              let r_line = rp[idx]
-              let i = labels.indexOf(r_line['_id'])
-              if(i>=0) {
-                regular_data[i] = r_line['count']
-              }
-            }
-
-            for(let idx in rp2) {
-              let r_line = rp2[idx]
-              let i = labels.indexOf(r_line['_id'])
-              if(i>=0) {
-                regular_data[i] = r_line['count']
-              }
-            }
-
-            for(let idx in pp2) {
-              let r_line = pp2[idx]
-              let i = labels.indexOf(r_line['_id'])
-              if(i>=0) {
-                playoff_data[i] = r_line['count']
-              }
-            }
-
-
-            let new_data = [{
-                data: regular_data,
-                label: "Match régulier",
-                borderColor: "#3e95cd",
-                fill: false
-              },
-              {
-                data: playoff_data,
-                label: "Playoff",
-                borderColor: "#7c0a02",
-                fill: false
-              }
-            ]
-            this.$set(this.chartRegularPlayoffData, 'datasets' , new_data);
-            this.$set(this.chartRegularPlayoffData, 'labels' , labels);
-            this.chartRegularPlayoff_loaded = true;
-            
-
-        })  // END AXIOS THEN 
-
 
         // GET PLAYERS STATS
         axios.get(this.$serverUrl + '/player_stats')
