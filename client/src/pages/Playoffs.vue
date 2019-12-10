@@ -1,14 +1,30 @@
 <template>
   <div>
     <div class="row">
-      <card title="Comparaison match régulier vs playoff pour une saison">
-        Choisissez une saison:
-        <select v-model="current_saison" v-on:change="updateRadarChart()">
-          <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
-        </select>
-        <!--<BarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoffData != null"/>-->
-        <RadarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoff_loaded"/>
+      <div class="col-md-8">
+        <card title="Comparaison match régulier vs playoff pour une saison">
+          Choisissez une saison:
+          <select v-model="current_saison" v-on:change="updateRadarChart()">
+            <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
+          </select>
+          <!--<BarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoffData != null"/>-->
+          <RadarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoff_loaded"/>
+        </card>
+      </div>
+      <div class="col-md-4">
+      <card title="Params">
+        <div id='example-3'>
+          <input type="checkbox" id="Goal" value="Goal" v-model="checkParams" @change="handleChange($event)"><label for="Goal">Goal</label><br/>
+<input type="checkbox" id="Penalty" value="Penalty" v-model="checkParams" @change="handleChange($event)"><label for="Penalty">Penalty</label><br/>
+ <input type="checkbox" id="Shot" value="Shot" v-model="checkParams" @change="handleChange($event)"><label for="Shot">Shot</label><br/>
+ <input type="checkbox" id="Faceoff" value="Faceoff" v-model="checkParams" @change="handleChange($event)"><label for="Faceoff">Faceoff</label><br/>
+<input type="checkbox" id="Blocked Shot" value="Blocked Shot" v-model="checkParams" @change="handleChange($event)"><label for="Blocked Shot">Blocked Shot</label><br/>
+<input type="checkbox" id="Hit" value="Hit" v-model="checkParams" @change="handleChange($event)"><label for="Hit">Hit</label><br/>
+<input type="checkbox" id="Interference" value="Interference" v-model="checkParams" @change="handleChange($event)"><label for="Interference">Interference</label><br/>
+ <input type="checkbox" id="Stoppage" value="Stoppage" v-model="checkParams" @change="handleChange($event)"><label for="Stoppage">Stoppage</label><br/>
+        </div>
       </card>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +41,7 @@
     },
     data() {
       return {
+        checkParams : [],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
@@ -56,6 +73,14 @@
       '$route': 'fetchData'
     },
     methods: {
+      handleChange: function(e) {
+        
+        this.chartRegularPlayoff_loaded = false;
+        console.log("change !")
+        this.chartRegularPlayoff_loaded = true;
+        this.updateRadarChart()
+        this.$forceUpdate()
+      },
       fetchData() {
         console.log("Fetch data ...");
         // GET PLAYOFF REGULAR COMPARAISON
@@ -65,7 +90,7 @@
         console.log("Updating chart.... " + this.current_saison);
         // GET PLAYOFF REGULAR COMPARAISON
         this.chartRegularPlayoff_loaded = false;
-        let labels = ['Goal', 'Penalty', 'Shot', 'Faceoff', 'Blocked Shot', 'Hit', "Interference"];
+        let labels = this.checkParams;
         axios.get(this.$serverUrl + '/games_plays/compare/' + this.current_saison)
           .then(response => {
             let rp = response.data['RP'];
