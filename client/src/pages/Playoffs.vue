@@ -75,7 +75,7 @@
             callbacks: {
               title: function (tooltipItems, data) {
                 //Return value for title
-                return tooltipItems.xLabel;
+                return '' + data.labels[tooltipItems[0].index];
               },
               label: function (tooltipItem, data) {
                 var label = data.datasets[tooltipItem.datasetIndex].label || '';
@@ -85,6 +85,18 @@
                 }
                 label += data.datasets[tooltipItem.datasetIndex + 2].data[tooltipItem.index];
                 return label;
+              }
+            }
+          },
+          legend: {
+            labels: {
+              filter: function (item, chart) {
+                if(item.text.includes('1')){
+                  return false
+                } else if(item.text.includes('2')) {
+                  return false
+                }
+                return true
               }
             }
           }
@@ -205,12 +217,12 @@
               },
               {
                 data: this.regularData,
-                label: "",
+                label: "1",
                 hidden: true
               },
               {
                 data: this.playoffData,
-                label: "",
+                label: "2",
                 hidden: true
               },
             ];
