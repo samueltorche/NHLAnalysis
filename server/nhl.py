@@ -418,6 +418,39 @@ def get_avg_nbr_shots():
     return data
 
 
+def get_avg_nbr_hits():
+    '''
+    data = []
+    for season in seasons_to_eval:
+        list_of_games = games_collection.find({"season": season})
+        nbr_of_hits = 0
+        for game in list_of_games:
+            hits = game_plays_collection.find({"game_id": game["game_id"], "event": "Hit"}).count()
+            nbr_of_hits += hits
+        obj = {
+            "season": season,
+            "hits": nbr_of_hits
+        }
+        data.append(obj)
+    i = 0
+    for obj in data:
+        obj['hits_avg'] = obj['hits'] / number_of_games_per_season[i]
+        i += 1
+    print(data)
+    '''
+    data = [{'season': 20102011, 'hits': 59857, 'hits_avg': 45.380591357088704},
+            {'season': 20112012, 'hits': 60519, 'hits_avg': 45.9870820668693},
+            {'season': 20122013, 'hits': 39794, 'hits_avg': 49.37220843672456},
+            {'season': 20132014, 'hits': 62973, 'hits_avg': 47.59863945578231},
+            {'season': 20142015, 'hits': 66342, 'hits_avg': 50.297194844579224},
+            {'season': 20152016, 'hits': 61615, 'hits_avg': 46.64269492808479},
+            {'season': 20162017, 'hits': 58635, 'hits_avg': 44.521640091116176},
+            {'season': 20172018, 'hits': 58962, 'hits_avg': 43.51439114391144},
+            {'season': 20182019, 'hits': 62576, 'hits_avg': 46.079528718703976}]
+    return data
+
+
+
 def get_player_details():
 
     filename = 'player_stats.json'

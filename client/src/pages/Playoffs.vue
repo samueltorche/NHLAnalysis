@@ -50,7 +50,7 @@
     },
     data() {
       return {
-        checkParams: ['Goal', 'Penalty', "Shot"],
+        checkParams: ['Goal', 'Penalty', "Shot", "Hit", "Faceoff"],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
@@ -58,7 +58,12 @@
         chartRegularPlayoff_loaded: false,
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scale: {
+            ticks: {
+              display: false
+            }
+          }
         },
         saisons_options: [
           {value: '20102011', text: '2010-2011'},
@@ -109,14 +114,14 @@
               let p_line = pp[idx];
               let i = labels.indexOf(p_line['_id']);
               if (i >= 0) {
-                playoff_data[i] = p_line['count']
+                playoff_data[i] = Math.round(p_line['count'] * 100) / 100
               }
             }
             for (let idx in rp) {
               let r_line = rp[idx];
               let i = labels.indexOf(r_line['_id']);
               if (i >= 0) {
-                regular_data[i] = r_line['count']
+                regular_data[i] = Math.round(r_line['count'] * 100) / 100
               }
             }
 
@@ -124,7 +129,7 @@
               let r_line = rp2[idx];
               let i = labels.indexOf(r_line['_id']);
               if (i >= 0) {
-                regular_data[i] = r_line['count']
+                regular_data[i] = Math.round(r_line['count'] * 100) / 100
               }
             }
 
@@ -132,7 +137,7 @@
               let r_line = pp2[idx];
               let i = labels.indexOf(r_line['_id']);
               if (i >= 0) {
-                playoff_data[i] = r_line['count']
+                playoff_data[i] = Math.round(r_line['count'] * 100) / 100
               }
             }
 
@@ -140,13 +145,15 @@
               {
                 data: regular_data,
                 label: "Match régulier",
-                borderColor: "#3e95cd",
+                borderColor: "#56B4E9",
+                backgroundColor: "#56B4E9",
                 fill: false
               },
               {
                 data: playoff_data,
                 label: "Playoff",
-                borderColor: "#7c0a02",
+                borderColor: "#E69F00",
+                backgroundColor: "#E69F00",
                 fill: false
               }
             ];
@@ -154,7 +161,7 @@
             this.$set(this.chartRegularPlayoffData, 'labels', labels);
             this.chartRegularPlayoff_loaded = true;
           });// END AXIOS THEN
-      }
+      },
     }
   }
 </script>

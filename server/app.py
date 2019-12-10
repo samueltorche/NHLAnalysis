@@ -77,6 +77,12 @@ def get_season_avg_penalties():
     return json.dumps(data)
 
 
+@app.route('/season/avg_hits')
+def get_season_avg_hits():
+    data = nhl.get_avg_nbr_hits()
+    return json.dumps(data)
+
+
 @app.route('/games_plays/compare/<season>')
 def get_compare_playoff_season(season):
     data = nhl.compare_playoff_season(game_plays_collection, games_collection,season)

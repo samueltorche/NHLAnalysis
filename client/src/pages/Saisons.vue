@@ -11,14 +11,19 @@
           <LineChart :chartdata="chartShotsData" :options="options" v-if="chartShots_loaded"/>
         </card>
       </div>
-      <div class="col-6">
-        <card title="Evolution des bagarres au fil des saisons" subTitle="">
-          <LineChart :chartdata="chartBagarresData" :options="options" v-if="chartBagarres_loaded"/>
-        </card>
-      </div>
-      <div class="col-6">
+      <div class="col-4">
         <card title="Evolution des pénalités au fil des saisons" subTitle="">
           <LineChart :chartdata="chartPenaltiesData" :options="options" v-if="chartPenalties_loaded"/>
+        </card>
+      </div>
+      <div class="col-4">
+        <card title="Evolution des hits au fil des saisons" subTitle="">
+          <LineChart :chartdata="chartHitsData" :options="options" v-if="chartHits_loaded"/>
+        </card>
+      </div>
+      <div class="col-4">
+        <card title="Evolution des bagarres au fil des saisons" subTitle="">
+          <LineChart :chartdata="chartBagarresData" :options="options" v-if="chartBagarres_loaded"/>
         </card>
       </div>
     </div>
@@ -51,32 +56,37 @@
     data() {
       return {
         chartButsData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartPlayerData_loaded: false,
         chartPlayerData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartPlayerTimeData_loaded: false,
         chartPlayerTimeData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartButs_loaded: false,
         chartShotsData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          datasets: [{}]
+        },
+        chartHits_loaded: false,
+        chartHitsData: {
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartShots_loaded: false,
         chartBagarresData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartBagarres_loaded: false,
         chartPenaltiesData: {
-          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+          labels: ["2010-2011", "2011-2012", "2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
           datasets: [{}]
         },
         chartPenalties_loaded: false,
@@ -157,6 +167,32 @@
           }];
           this.$set(this.chartShotsData, 'datasets', newvalue);
           this.chartShots_loaded = true;
+        }).catch(error => {
+          console.log(error);
+        });
+        // GET AVG SEASON HITS
+        axios.get(this.$serverUrl + '/season/avg_hits').then(response => {
+          console.log(response.data);
+          let new_data = [
+            Math.round(response.data[0].hits_avg * 100) / 100,
+            Math.round(response.data[1].hits_avg * 100) / 100,
+            Math.round(response.data[2].hits_avg * 100) / 100,
+            Math.round(response.data[3].hits_avg * 100) / 100,
+            Math.round(response.data[4].hits_avg * 100) / 100,
+            Math.round(response.data[5].hits_avg * 100) / 100,
+            Math.round(response.data[6].hits_avg * 100) / 100,
+            Math.round(response.data[7].hits_avg * 100) / 100,
+            Math.round(response.data[8].hits_avg * 100) / 100,
+          ];
+          let newvalue = [{
+            data: new_data,
+            label: "Moyenne de mises en échecs par match ",
+            borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
+            fill: false
+          }];
+          this.$set(this.chartHitsData, 'datasets', newvalue);
+          this.chartHits_loaded = true;
         }).catch(error => {
           console.log(error);
         });
