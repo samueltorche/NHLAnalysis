@@ -1,9 +1,12 @@
 <template>
   <div>
     <h4>Choisissez une saison:</h4>
+
     <select v-model="current_saison" v-on:change="updateRadarChart()" style="margin-bottom: 21px">
       <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
     </select>
+    <input type="checkbox" id="Normalize" value="Normalize" v-model="normalize"
+                   @change="handleChange($event)"><label for="Normalize">Normalize</label>
     <div class="row">
       <div class="col-md-8">
         <card title="Comparaison match régulier vs playoff pour une saison">
@@ -50,6 +53,7 @@
     },
     data() {
       return {
+        normalize: false,
         checkParams: ['Goal', 'Penalty', "Shot"],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
@@ -109,7 +113,7 @@
               let p_line = pp[idx];
               let i = labels.indexOf(p_line['_id']);
               if (i >= 0) {
-                playoff_data[i] = p_line['count']
+                playoff_data[i] = p_line['count']   
               }
             }
             for (let idx in rp) {
@@ -134,6 +138,26 @@
               if (i >= 0) {
                 playoff_data[i] = r_line['count']
               }
+            }
+
+            for( let i in playoff_data){
+              let r = regular_data[i] 
+              let p = playoff_data[i]
+
+              /*
+              if ( r>p) {
+                p = 100 * p / r
+                r = 100
+              } else {
+                r = 100 * r / p
+                p = 100
+              }*/
+              
+              if( this.normalize) {
+                regular_data[i] = r/(r+p)
+                playoff_data[i] = p/(r+p)
+              }
+
             }
 
             let new_data = [
