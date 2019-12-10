@@ -50,7 +50,7 @@
     },
     data() {
       return {
-        checkParams: [],
+        checkParams: ['Goal', 'Penalty', "Shot"],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
           datasets: [{}]
