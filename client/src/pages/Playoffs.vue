@@ -5,8 +5,9 @@
     <select v-model="current_saison" v-on:change="updateRadarChart()" style="margin-bottom: 21px">
       <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
     </select>
+    <br>
     <input type="checkbox" id="Normalize" value="Normalize" v-model="normalize"
-                   @change="handleChange($event)"><label for="Normalize">Normalize</label>
+           @change="handleChange($event)"><label for="Normalize">Normalize</label>
     <div class="row">
       <div class="col-md-8">
         <card title="Comparaison match régulier vs playoff pour une saison">
@@ -54,6 +55,8 @@
     data() {
       return {
         normalize: false,
+        regularData: [],
+        playoffData: [],
         checkParams: ['Goal', 'Penalty', "Shot", "Hit", "Faceoff"],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
@@ -66,6 +69,23 @@
           scale: {
             ticks: {
               display: false
+            }
+          },
+          tooltips: {
+            callbacks: {
+              title: function (tooltipItems, data) {
+                //Return value for title
+                return tooltipItems.xLabel;
+              },
+              label: function (tooltipItem, data) {
+                var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                if (label) {
+                  label += ': ';
+                }
+                label += data.datasets[tooltipItem.datasetIndex + 2].data[tooltipItem.index];
+                return label;
+              }
             }
           }
         },
@@ -80,7 +100,7 @@
           {value: '20172018', text: '2017-2018'},
           {value: '20182019', text: '2018-2019'}
         ],
-        current_saison: "20182019"
+        current_saison: "20182019",
       }
     },
     created() {
@@ -145,8 +165,11 @@
               }
             }
 
-            for( let i in playoff_data){
-              let r = regular_data[i] 
+            this.regularData = regular_data.slice();
+            this.playoffData = playoff_data.slice();
+
+            for (let i in playoff_data) {
+              let r = regular_data[i]
               let p = playoff_data[i]
 
               /*
@@ -157,10 +180,10 @@
                 r = 100 * r / p
                 p = 100
               }*/
-              
-              if( this.normalize) {
-                regular_data[i] = r/(r+p)
-                playoff_data[i] = p/(r+p)
+
+              if (this.normalize) {
+                regular_data[i] = r / (r + p)
+                playoff_data[i] = p / (r + p)
               }
 
             }
@@ -179,7 +202,17 @@
                 borderColor: "#E69F00",
                 backgroundColor: "#E69F00",
                 fill: false
-              }
+              },
+              {
+                data: this.regularData,
+                label: "",
+                hidden: true
+              },
+              {
+                data: this.playoffData,
+                label: "",
+                hidden: true
+              },
             ];
             this.$set(this.chartRegularPlayoffData, 'datasets', new_data);
             this.$set(this.chartRegularPlayoffData, 'labels', labels);
