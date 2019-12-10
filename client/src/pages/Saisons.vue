@@ -112,20 +112,21 @@
         axios.get(this.$serverUrl + '/season/avg_goal').then(response => {
           console.log(response.data);
           let new_data = [
-            response.data[0].avg,
-            response.data[1].avg,
-            response.data[2].avg,
-            response.data[3].avg,
-            response.data[4].avg,
-            response.data[5].avg,
-            response.data[6].avg,
-            response.data[7].avg,
-            response.data[8].avg,
+            Math.round(response.data[0].avg * 100) / 100,
+            Math.round(response.data[1].avg * 100) / 100,
+            Math.round(response.data[2].avg * 100) / 100,
+            Math.round(response.data[3].avg * 100) / 100,
+            Math.round(response.data[4].avg * 100) / 100,
+            Math.round(response.data[5].avg * 100) / 100,
+            Math.round(response.data[6].avg * 100) / 100,
+            Math.round(response.data[7].avg * 100) / 100,
+            Math.round(response.data[8].avg * 100) / 100,
           ];
           let newvalue = [{
             data: new_data,
             label: "Moyenne de buts par match",
             borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
             fill: false
           }];
           this.$set(this.chartButsData, 'datasets', newvalue);
@@ -137,20 +138,21 @@
         axios.get(this.$serverUrl + '/season/avg_shots').then(response => {
           console.log(response.data);
           let new_data = [
-            response.data[0].shots_avg,
-            response.data[1].shots_avg,
-            response.data[2].shots_avg,
-            response.data[3].shots_avg,
-            response.data[4].shots_avg,
-            response.data[5].shots_avg,
-            response.data[6].shots_avg,
-            response.data[7].shots_avg,
-            response.data[8].shots_avg,
+            Math.round(response.data[0].shots_avg * 100) / 100,
+            Math.round(response.data[1].shots_avg * 100) / 100,
+            Math.round(response.data[2].shots_avg * 100) / 100,
+            Math.round(response.data[3].shots_avg * 100) / 100,
+            Math.round(response.data[4].shots_avg * 100) / 100,
+            Math.round(response.data[5].shots_avg * 100) / 100,
+            Math.round(response.data[6].shots_avg * 100) / 100,
+            Math.round(response.data[7].shots_avg * 100) / 100,
+            Math.round(response.data[8].shots_avg * 100) / 100,
           ];
           let newvalue = [{
             data: new_data,
             label: "Moyenne de tirs par match",
             borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
             fill: false
           }];
           this.$set(this.chartShotsData, 'datasets', newvalue);
@@ -162,20 +164,21 @@
         axios.get(this.$serverUrl + '/season/avg_fights').then(response => {
           console.log(response.data);
           let new_data = [
-            response.data[0].fights_avg,
-            response.data[1].fights_avg,
-            response.data[2].fights_avg,
-            response.data[3].fights_avg,
-            response.data[4].fights_avg,
-            response.data[5].fights_avg,
-            response.data[6].fights_avg,
-            response.data[7].fights_avg,
-            response.data[8].fights_avg,
+            Math.round(response.data[0].fights_avg * 100) / 100,
+            Math.round(response.data[1].fights_avg * 100) / 100,
+            Math.round(response.data[2].fights_avg * 100) / 100,
+            Math.round(response.data[3].fights_avg * 100) / 100,
+            Math.round(response.data[4].fights_avg * 100) / 100,
+            Math.round(response.data[5].fights_avg * 100) / 100,
+            Math.round(response.data[6].fights_avg * 100) / 100,
+            Math.round(response.data[7].fights_avg * 100) / 100,
+            Math.round(response.data[8].fights_avg * 100) / 100,
           ];
           let newvalue = [{
             data: new_data,
             label: "Moyenne de bagarres par match",
             borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
             fill: false
           }];
           this.$set(this.chartBagarresData, 'datasets', newvalue);
@@ -187,20 +190,21 @@
         axios.get(this.$serverUrl + '/season/avg_penalties').then(response => {
           console.log(response.data);
           let new_data = [
-            response.data[0].penalties_avg,
-            response.data[1].penalties_avg,
-            response.data[2].penalties_avg,
-            response.data[3].penalties_avg,
-            response.data[4].penalties_avg,
-            response.data[5].penalties_avg,
-            response.data[6].penalties_avg,
-            response.data[7].penalties_avg,
-            response.data[8].penalties_avg,
+            Math.round(response.data[0].penalties_avg * 100) / 100,
+            Math.round(response.data[1].penalties_avg * 100) / 100,
+            Math.round(response.data[2].penalties_avg * 100) / 100,
+            Math.round(response.data[3].penalties_avg * 100) / 100,
+            Math.round(response.data[4].penalties_avg * 100) / 100,
+            Math.round(response.data[5].penalties_avg * 100) / 100,
+            Math.round(response.data[6].penalties_avg * 100) / 100,
+            Math.round(response.data[7].penalties_avg * 100) / 100,
+            Math.round(response.data[8].penalties_avg * 100) / 100,
           ];
           let newvalue = [{
             data: new_data,
             label: "Moyenne de pénalités par match",
             borderColor: "#3e95cd",
+            backgroundColor: "#3e95cd",
             fill: false
           }];
           this.$set(this.chartPenaltiesData, 'datasets', newvalue);
@@ -236,15 +240,26 @@
               return "rgb(" + r + "," + g + "," + b + ")";
             }
 
+            let colorBlindFriendly = [
+              "rgb(230,159,0)",
+              "rgb(86,180,233)",
+              "rgb(0,158,115)",
+              "rgb(240,228,66)",
+              "rgb(0,114,178)",
+              "rgb(213,94,0)",
+              "rgb(204,121,167)"
+            ];
+
             for(let s in response.data){
               let players = response.data[s]
+              let i = 0;
               for(let p in players) {
                 let player = players[p][0]
                 let pid = player['_id']
-                players_data[pid]['time'].push(
-                player['timeOnIce'])
-                players_data[pid]['color'] = rcolor()
+                players_data[pid]['time'].push(player['timeOnIce'])
+                players_data[pid]['color'] = colorBlindFriendly[i]
                 players_data[pid]['goals'].push(player['goals'])
+                i++;
               }
             }
 
@@ -257,6 +272,7 @@
                 "data": player_data['goals'],
                 "label": p,
                 "borderColor": player_data['color'],
+                "backgroundColor": player_data['color'],
                 "fill": false
               }
               datas.push(d)
@@ -272,6 +288,7 @@
                 "data": player_data['time'],
                 "label": p,
                 "borderColor": player_data['color'],
+                "backgroundColor": player_data['color'],
                 "fill": false
               }
               datas.push(d)
@@ -281,9 +298,6 @@
             this.chartPlayerTimeData_loaded = true;
             
         })
-
-
-
       }
     }
   }
