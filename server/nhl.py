@@ -700,4 +700,5 @@ def get_playoff(season):
         return _json
 
 def team_name(team_id): 
-    return list(teams_collection.find({"team_id": team_id}))[0]['teamName']
+    t = list(teams_collection.find({"team_id": team_id}))[0]
+    return t["shortName"] + " "+t['teamName']
