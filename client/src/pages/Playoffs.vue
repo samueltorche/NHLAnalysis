@@ -204,7 +204,7 @@
     data() {
       return {
         chartEvoData: {
-          labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81],
+          labels: [],
           datasets: [{}]
         },
         chartEvoData_loaded: false,
@@ -220,7 +220,15 @@
         chartRegularPlayoff_loaded: false,
         optionLineChart: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 10
+              }
+            }]
+          }
         },
         options: {
           responsive: true,
@@ -304,20 +312,37 @@
           .then(response => {
             let values = []
             let labels = []
-            for (let i = 0; i < 82; i++) {
-              labels[i] = i
-            }
 
+
+            let colorBlindFriendly = [
+              "rgb(230,159,0)",
+              "rgb(86,180,233)",
+              "rgb(0,158,115)",
+              "rgb(240,228,66)",
+              "rgb(0,114,178)",
+              "rgb(213,94,0)",
+              "rgb(204,121,167)"
+            ];
+
+            let i = 0;
+            let number_of_match = 0;
             for (let res in response.data) {
+              number_of_match = response.data[res].length;
               let newvalue = {
                 data: response.data[res],
                 label: res,
-                borderColor: "#3e95cd",
-                backgroundColor: "#3e95cd",
+                borderColor: colorBlindFriendly[i],
+                backgroundColor: colorBlindFriendly[i],
                 fill: false
               }
               values.push(newvalue)
+              i++;
             }
+
+            for (let i = 0; i < number_of_match; i++) {
+              labels[i] = i + 1
+            }
+
             this.$set(this.chartEvoData, 'labels', labels);
             this.$set(this.chartEvoData, 'datasets', values);
             this.chartEvoData_loaded = true;
