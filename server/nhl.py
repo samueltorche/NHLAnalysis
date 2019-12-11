@@ -616,7 +616,7 @@ def get_top_team_of_season(season):
         }])
 
     result = {}
-    leaderboard = list(leaderboard)[:5]
+    leaderboard = list(leaderboard)[:6]
     for stat in leaderboard:
         team_id = stat['_id']
         points_evo = []

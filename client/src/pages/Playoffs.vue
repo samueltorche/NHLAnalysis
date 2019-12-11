@@ -6,18 +6,13 @@
       <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
     </select>
     <br>
-    <input type="checkbox" id="Normalize" value="Normalize" v-model="normalize"
-           @change="handleChange($event)"><label for="Normalize">Normalize</label>
-    <div class="row">
-      <div class="col-12">
-        <card title="Evolution du leaderboard" subTitle="">
-          <LineChart :chartdata="chartEvoData" :options="optionLineChart" v-if="chartEvoData_loaded"/>
-        </card>
-      </div>
-    </div>
+   
     <div class="row">
       <div class="col-md-8">
         <card title="Comparaison match régulier vs playoff pour une saison">
+
+          <input type="checkbox" id="Normalize" value="Normalize" v-model="normalize"
+           @change="handleChange($event)"><label for="Normalize">Normalize</label>
 
           <!--<BarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoffData != null"/>-->
           <RadarChart :chartdata="chartRegularPlayoffData" :options="options" v-if="chartRegularPlayoff_loaded"/>
@@ -48,8 +43,17 @@
         </card>
       </div>
     </div>
+
     <div class="row">
-      <div class="col-md-6" v-if="playoff_ranking.length > 0">
+      <div class="col-12">
+        <card title="Evolution du leaderboard" subTitle="">
+          <LineChart :chartdata="chartEvoData" :options="optionLineChart" v-if="chartEvoData_loaded"/>
+        </card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" v-if="playoff_ranking.length > 0">
+       <card title="Résultats des playoffs">
         <main id="tournament">
           <ul class="round round-1">
             <li class="spacer">&nbsp;</li>
@@ -184,6 +188,7 @@
             <li class="spacer">&nbsp;</li>
           </ul>
         </main>
+        </card>
       </div>
     </div>
   </div>
@@ -515,6 +520,8 @@
 
   li.game.winner {
     font-weight: bold;
+    background: green;
+    color: white;
   }
 
   li.game span {
