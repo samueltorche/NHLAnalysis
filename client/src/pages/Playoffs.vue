@@ -35,6 +35,8 @@
                    @change="handleChange($event)"><label for="Interference">Interference</label><br/>
             <input type="checkbox" id="Stoppage" value="Stoppage" v-model="checkParams"
                    @change="handleChange($event)"><label for="Stoppage">Stoppage</label><br/>
+            <input type="checkbox" id="Charging" value="Charging" v-model="checkParams"
+                   @change="handleChange($event)"><label for="Charging">Charging</label><br/>
           </div>
         </card>
       </div>
