@@ -2,7 +2,7 @@
   <div>
     <h4>Choisissez une saison:</h4>
 
-    <select v-model="current_saison" v-on:change="updateRadarChart()" style="margin-bottom: 21px">
+    <select v-model="current_saison" v-on:change="updateAll()" style="margin-bottom: 21px">
       <option v-for="saison in saisons_options" :value="saison.value">{{saison.text}}</option>
     </select>
     <br>
@@ -359,6 +359,7 @@
           });// END AXIOS THEN
       },
       updatePlayoffBracket() {
+        console.log("Updating playoff.... " + this.current_saison);
         //GET AVG NBR OF FIGHTS BY SEASON
         axios.get(this.$serverUrl + '/get_playoff/' + this.current_saison).then(response => {
           console.log(response.data);
@@ -366,6 +367,10 @@
         }).catch(error => {
           console.log(error);
         });
+      },
+      updateAll() {
+        this.updateRadarChart();
+        this.updatePlayoffBracket();
       }
     }
   }

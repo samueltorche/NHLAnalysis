@@ -2,91 +2,91 @@
   {
     "type": "Finals",
     "top_name": "Boston",
-    "bot_name": "Vancouver",
-    "top_wins": true
-  },
-  {
-    "type": "Conference Finals",
-    "top_name": "Tampa Bay",
-    "bot_name": "Boston",
+    "bot_name": "St. Louis",
     "top_wins": false
   },
   {
     "type": "Conference Finals",
-    "top_name": "Vancouver",
+    "top_name": "Boston",
+    "bot_name": "Carolina",
+    "top_wins": true
+  },
+  {
+    "type": "Conference Finals",
+    "top_name": "St. Louis",
     "bot_name": "San Jose",
     "top_wins": true
   },
   {
     "type": "Conference Semifinals",
-    "top_name": "Washington",
-    "bot_name": "Tampa Bay",
-    "top_wins": false
-  },
-  {
-    "type": "Conference Semifinals",
-    "top_name": "Philadelphia",
+    "top_name": "Columbus",
     "bot_name": "Boston",
     "top_wins": false
   },
   {
     "type": "Conference Semifinals",
-    "top_name": "Vancouver",
-    "bot_name": "Nashville",
+    "top_name": "Carolina",
+    "bot_name": "NY Islanders",
     "top_wins": true
   },
   {
     "type": "Conference Semifinals",
-    "top_name": "San Jose",
-    "bot_name": "Detroit",
+    "top_name": "Dallas",
+    "bot_name": "St. Louis",
+    "top_wins": false
+  },
+  {
+    "type": "Conference Semifinals",
+    "top_name": "Colorado",
+    "bot_name": "San Jose",
+    "top_wins": false
+  },
+  {
+    "type": "Conference Quarterfinals",
+    "top_name": "Tampa Bay",
+    "bot_name": "Columbus",
+    "top_wins": false
+  },
+  {
+    "type": "Conference Quarterfinals",
+    "top_name": "Boston",
+    "bot_name": "Toronto",
     "top_wins": true
   },
   {
     "type": "Conference Quarterfinals",
     "top_name": "Washington",
-    "bot_name": "NY Rangers",
-    "top_wins": true
-  },
-  {
-    "type": "Conference Quarterfinals",
-    "top_name": "Pittsburgh",
-    "bot_name": "Tampa Bay",
+    "bot_name": "Carolina",
     "top_wins": false
   },
   {
     "type": "Conference Quarterfinals",
-    "top_name": "Philadelphia",
-    "bot_name": "Buffalo",
+    "top_name": "NY Islanders",
+    "bot_name": "Pittsburgh",
     "top_wins": true
   },
   {
     "type": "Conference Quarterfinals",
-    "top_name": "Boston",
-    "bot_name": "Montreal",
-    "top_wins": true
+    "top_name": "Nashville",
+    "bot_name": "Dallas",
+    "top_wins": false
   },
   {
     "type": "Conference Quarterfinals",
-    "top_name": "Vancouver",
-    "bot_name": "Chicago",
-    "top_wins": true
+    "top_name": "Winnipeg",
+    "bot_name": "St. Louis",
+    "top_wins": false
   },
   {
     "type": "Conference Quarterfinals",
-    "top_name": "Anaheim",
-    "bot_name": "Nashville",
+    "top_name": "Calgary",
+    "bot_name": "Colorado",
     "top_wins": false
   },
   {
     "type": "Conference Quarterfinals",
     "top_name": "San Jose",
-    "bot_name": "Los Angeles",
-    "top_wins": true
-  },
-  {
-    "type": "Conference Quarterfinals",
-    "top_name": "Detroit",
-    "bot_name": "Phoenix",
-    "top_wins": true
+    "bot_name": "Vegas",
+    "top_wins": false
   }
 ]
