@@ -122,21 +122,39 @@
         axios.get(this.$serverUrl + '/season/avg_goal').then(response => {
           console.log(response.data);
           let new_data = [
-            Math.round(response.data[0].avg * 100) / 100,
-            Math.round(response.data[1].avg * 100) / 100,
-            Math.round(response.data[2].avg * 100) / 100,
-            Math.round(response.data[3].avg * 100) / 100,
-            Math.round(response.data[4].avg * 100) / 100,
-            Math.round(response.data[5].avg * 100) / 100,
-            Math.round(response.data[6].avg * 100) / 100,
-            Math.round(response.data[7].avg * 100) / 100,
-            Math.round(response.data[8].avg * 100) / 100,
+            Math.round(response.data['R'][0].avg * 100) / 100,
+            Math.round(response.data['R'][1].avg * 100) / 100,
+            Math.round(response.data['R'][2].avg * 100) / 100,
+            Math.round(response.data['R'][3].avg * 100) / 100,
+            Math.round(response.data['R'][4].avg * 100) / 100,
+            Math.round(response.data['R'][5].avg * 100) / 100,
+            Math.round(response.data['R'][6].avg * 100) / 100,
+            Math.round(response.data['R'][7].avg * 100) / 100,
+            Math.round(response.data['R'][8].avg * 100) / 100,
+          ];
+          let new_data2 = [
+            Math.round(response.data['P'][0].avg * 100) / 100,
+            Math.round(response.data['P'][1].avg * 100) / 100,
+            Math.round(response.data['P'][2].avg * 100) / 100,
+            Math.round(response.data['P'][3].avg * 100) / 100,
+            Math.round(response.data['P'][4].avg * 100) / 100,
+            Math.round(response.data['P'][5].avg * 100) / 100,
+            Math.round(response.data['P'][6].avg * 100) / 100,
+            Math.round(response.data['P'][7].avg * 100) / 100,
+            Math.round(response.data['P'][8].avg * 100) / 100,
           ];
           let newvalue = [{
             data: new_data,
-            label: "Moyenne de buts par match",
+            label: "Moyenne de buts par match S",
             borderColor: "#3e95cd",
             backgroundColor: "#3e95cd",
+            fill: false
+          },
+          {
+            data: new_data2,
+            label: "Moyenne de buts par match P",
+            borderColor: "rgb(213,94,0)",
+            backgroundColor: "rgb(213,94,0)",
             fill: false
           }];
           this.$set(this.chartButsData, 'datasets', newvalue);
@@ -144,6 +162,7 @@
         }).catch(error => {
           console.log(error);
         });
+
         // GET AVG SEASON SHOTS
         axios.get(this.$serverUrl + '/season/avg_shots').then(response => {
           console.log(response.data);

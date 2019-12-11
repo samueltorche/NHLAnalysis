@@ -8,6 +8,7 @@ db = client.nhl
 
 game_plays_collection = db['game_plays']
 games_collection = db['game']
+games_teams_collection = db['game_teams']
 skater_collection = db['shifts']
 players_collection = db['players']
 
@@ -291,7 +292,14 @@ def compare_playoff_season(plays, games, season):
 
 
 def get_season_goal_average(col):
-    res = col.aggregate([
+
+    p = col.aggregate([
+        {
+            "$match": 
+            {
+                "type" : "P"
+            }
+        },  
 
         {
             "$group":
@@ -318,7 +326,45 @@ def get_season_goal_average(col):
 
         {"$sort": {"_id": 1}}
     ])
-    return (list(res))
+
+    r = col.aggregate([
+        {
+            "$match": 
+            {
+                "type" : "R"
+            }
+        },  
+        {
+            "$group":
+                {
+                    "_id": "$season",
+                    "game_count": {"$sum": 1},
+                    "goals_count": {
+                        "$sum": {
+                            "$add": ["$away_goals", "$home_goals"]
+                        }
+                    }
+                }
+        },
+
+        {
+
+            "$project": {
+                "_id": 1,
+                "game_count": 1,
+                "goals_count": 1,
+                "avg": {"$divide": ["$goals_count", "$game_count"]}
+            }
+        },
+
+        {"$sort": {"_id": 1}}
+    ])
+
+    res = {
+        "R": list(r),
+        "P": list(p)
+    }
+    return (res)
 
 
 def get_season_fights_average():
@@ -518,3 +564,135 @@ def get_player_details():
 
 
 
+def get_top_team_of_season(season):
+    regx = re.compile("^" + season[:4], re.IGNORECASE)
+    leaderboard = games_teams_collection.aggregate([
+        {
+            "$match": {
+                "won": True
+            }
+        },
+        {
+            "$project": {
+                "game_id": 1,
+                "game_id_str": { "$toLower": "$game_id" },
+                "team_id": 1,
+                "points": {
+                    "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 1, "else": 2 }
+                }
+            }
+        },
+        {
+            "$match":
+            {
+                "game_id_str": {"$regex": regx}
+            }
+        },
+        {
+            "$lookup":
+            {
+                "from": 'game',
+                "localField": 'game_id',
+                "foreignField": 'game_id',
+                "as": 'g'
+            }
+        },
+        {
+            "$match":
+            {
+                "g.type": "R"
+            }
+        },
+        {
+            "$group":
+            {
+              "_id": "$team_id",
+              "count": {
+                "$sum": "$points"
+              }
+            }
+        },
+        {
+            "$sort":
+            {
+                "count" : -1
+            }
+        }])
+
+    result = {}
+    leaderboard = list(leaderboard)[:5]
+    for stat in leaderboard:
+        team_id = stat['_id']
+        points_evo = []
+        total_points = 0
+        evo = get_team_evolution(season, team_id)
+        for e in evo:
+            points = e['points']
+            total_points += points
+            points_evo.append(total_points)
+
+        result[team_id] = points_evo
+
+    return result
+
+
+def get_team_evolution(season, team_id):
+    print(season, team_id)
+    regx = re.compile("^" + season[:4], re.IGNORECASE)
+    evo = games_teams_collection.aggregate([
+    {
+        "$match":
+        {
+            "team_id": int(team_id)
+        }
+    }, 
+    {
+        "$project": {
+          "game_id": 1,
+          "game_id_str": { "$toLower": "$game_id" },
+          "points": { 
+            "$cond":{ 
+              "if": {
+                "$eq": ["$won", True]
+              },
+              "then" : {
+                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 1, "else": 2 }
+                   },
+              "else" : 0
+            }
+          },
+          "team_id": 1,
+        }
+    },
+    {
+        "$match": {
+            "game_id_str": {"$regex": regx}
+        }
+    },
+    {
+        "$lookup": {
+            "from": 'game',
+            "localField": 'game_id',
+            "foreignField": 'game_id',
+            "as": 'g'
+        }
+    },
+    {
+        "$match": {
+            "g.type": "R"
+        }
+    },
+    {
+        "$project": {
+            "_id":1,
+            "points": 1
+        }
+    },
+    {
+        "$sort": {
+            "game_id": 1
+        }
+    }
+    ])
+
+    return list(evo)

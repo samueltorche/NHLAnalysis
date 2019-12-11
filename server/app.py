@@ -95,6 +95,14 @@ def get_players_stats():
     return json.dumps(data)
 
 
+@app.route('/season/<season>/evolution')
+def get_season_evolution(season):
+    data = nhl.get_top_team_of_season(season)
+    return json.dumps(data)
+
+
+
+
 if __name__ == '__main__':
     #app.run(debug=True,host= '0.0.0.0')
     app.run(debug=True)
