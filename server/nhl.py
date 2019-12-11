@@ -563,19 +563,23 @@ def get_player_details():
 def get_top_team_of_season(season):
     regx = re.compile("^" + season[:4], re.IGNORECASE)
     leaderboard = games_teams_collection.aggregate([
-        {
-            "$match": {
-                "won": True
-            }
-        },
+
         {
             "$project": {
                 "game_id": 1,
                 "game_id_str": { "$toLower": "$game_id" },
                 "team_id": 1,
-                "points": {
-                    "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 1, "else": 2 }
+                "points": { 
+            "$cond":{ 
+              "if": {
+                "$eq": ["$won", True]
+              },
+              "then" : 2,
+              "else" : {
+                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 0, "else": 1 }
                 }
+            }
+          }
             }
         },
         {
