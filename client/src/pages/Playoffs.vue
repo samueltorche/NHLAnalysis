@@ -437,6 +437,7 @@
       updateAll() {
         this.updateRadarChart();
         this.updatePlayoffBracket();
+        this.updateEvoChart();
       }
     }
   }
