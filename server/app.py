@@ -103,6 +103,13 @@ def get_season_evolution(season):
 
 
 
+
+@app.route('/get_playoff/<season>')
+def get_playoffs(season):
+    data = nhl.get_playoff(season)
+    return json.dumps(data)
+
+
 if __name__ == '__main__':
     #app.run(debug=True,host= '0.0.0.0')
     app.run(debug=True)

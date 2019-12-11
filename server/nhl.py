@@ -394,6 +394,7 @@ def get_season_fights_average():
         i += 1
     return data
 
+
 def get_season_penalties_average():
     '''
     data = []
@@ -496,73 +497,67 @@ def get_avg_nbr_hits():
     return data
 
 
-
 def get_player_details():
-
     filename = 'player_stats.json'
     if os.path.exists(filename):
         with open(filename) as json_file:
             _json = json.load(json_file)
             return _json
 
-    best_players = [8471214, 8474564, 8474141,8475166, 8470794]
-    seasons = [2010,2011,2012,2013,2014,2015,2016,2017,2018]
+    best_players = [8471214, 8474564, 8474141, 8475166, 8470794]
+    seasons = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
     res = {}
     for season in seasons:
         res[season] = {}
         for bp in best_players:
-            regx = re.compile("^"+str(season), re.IGNORECASE)
+            regx = re.compile("^" + str(season), re.IGNORECASE)
             stats = skater_collection.aggregate([
                 {
                     "$project":
-                    {
-                      "game_id": { "$toLower": "$game_id" },
-                      "goals": 1,
-                      "timeOnIce": 1,
-                      "player_id": 1
-                    }
+                        {
+                            "game_id": {"$toLower": "$game_id"},
+                            "goals": 1,
+                            "timeOnIce": 1,
+                            "player_id": 1
+                        }
                 },
                 {
                     "$match":
-                    {
-                        "game_id": {"$regex": regx },
-                        "player_id": bp
-                    }
+                        {
+                            "game_id": {"$regex": regx},
+                            "player_id": bp
+                        }
                 },
-
 
                 {
                     "$group":
-                    {
-                        "_id": "$player_id",
-                        "goals": {"$sum": "$goals"},
-                        "timeOnIce": {"$sum": "$timeOnIce"}
-                    }
+                        {
+                            "_id": "$player_id",
+                            "goals": {"$sum": "$goals"},
+                            "timeOnIce": {"$sum": "$timeOnIce"}
+                        }
                 },
                 {
                     "$sort":
-                    {
-                        "goals": -1,
-                        "_id": 1
-                    }
+                        {
+                            "goals": -1,
+                            "_id": 1
+                        }
                 }
             ])
 
             _players = list(stats)
-            for _player in _players: 
+            for _player in _players:
                 pid = _player['_id']
                 player = list(players_collection.find({'player_id': pid}))[0]
                 _player['_id'] = player['lastName'] + " " + player['firstName']
-                #_player['_id'] = 10
-
+                # _player['_id'] = 10
 
             res[season][bp] = _players
 
     with open(filename, 'w') as outfile:
         json.dump(res, outfile)
     return res
-
-
 
 def get_top_team_of_season(season):
     regx = re.compile("^" + season[:4], re.IGNORECASE)
@@ -696,3 +691,9 @@ def get_team_evolution(season, team_id):
     ])
 
     return list(evo)
+
+def get_playoff(season):
+    filename = "playoff_" + str(season) + ".json"
+    with open(filename) as json_file:
+        _json = json.load(json_file)
+        return _json
