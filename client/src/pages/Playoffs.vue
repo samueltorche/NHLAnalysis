@@ -11,8 +11,8 @@
     <div class="row">
       <div class="col-12">
         <card title="Evolution du leaderboard" subTitle="">
-          <LineChart :chartdata="chartEvoData" :options="options" v-if="chartEvoData_loaded"/>
-      </card>
+          <LineChart :chartdata="chartEvoData" :options="optionLineChart" v-if="chartEvoData_loaded"/>
+        </card>
       </div>
     </div>
     <div class="row">
@@ -53,74 +53,134 @@
         <main id="tournament">
           <ul class="round round-1">
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[7].top_wins }">{{playoff_ranking[7].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[7].top_wins }">
+              {{playoff_ranking[7].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[7].top_wins }">{{playoff_ranking[7].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[7].top_wins }">
+              {{playoff_ranking[7].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[8].top_wins }">{{playoff_ranking[8].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[8].top_wins }">
+              {{playoff_ranking[8].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[8].top_wins }">{{playoff_ranking[8].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[8].top_wins }">
+              {{playoff_ranking[8].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[9].top_wins }">{{playoff_ranking[9].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[9].top_wins }">
+              {{playoff_ranking[9].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[9].top_wins }">{{playoff_ranking[9].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[9].top_wins }">
+              {{playoff_ranking[9].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[10].top_wins }">{{playoff_ranking[10].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[10].top_wins }">
+              {{playoff_ranking[10].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[10].top_wins }">{{playoff_ranking[10].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[10].top_wins }">
+              {{playoff_ranking[10].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[11].top_wins }">{{playoff_ranking[11].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[11].top_wins }">
+              {{playoff_ranking[11].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[11].top_wins }">{{playoff_ranking[11].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[11].top_wins }">
+              {{playoff_ranking[11].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[12].top_wins }">{{playoff_ranking[12].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[12].top_wins }">
+              {{playoff_ranking[12].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[12].top_wins }">{{playoff_ranking[12].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[12].top_wins }">
+              {{playoff_ranking[12].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[13].top_wins }">{{playoff_ranking[13].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[13].top_wins }">
+              {{playoff_ranking[13].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[13].top_wins }">{{playoff_ranking[13].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[13].top_wins }">
+              {{playoff_ranking[13].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[14].top_wins }">{{playoff_ranking[14].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[14].top_wins }">
+              {{playoff_ranking[14].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[14].top_wins }">{{playoff_ranking[14].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[14].top_wins }">
+              {{playoff_ranking[14].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
           </ul>
           <ul class="round round-2">
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[3].top_wins }">{{playoff_ranking[3].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[3].top_wins }">
+              {{playoff_ranking[3].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[3].top_wins }">{{playoff_ranking[3].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[3].top_wins }">
+              {{playoff_ranking[3].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[4].top_wins }">{{playoff_ranking[4].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[4].top_wins }">
+              {{playoff_ranking[4].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom " v-bind:class="{ winner: !playoff_ranking[4].top_wins }">{{playoff_ranking[4].bot_name}}</li>
+            <li class="game game-bottom " v-bind:class="{ winner: !playoff_ranking[4].top_wins }">
+              {{playoff_ranking[4].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[5].top_wins }">{{playoff_ranking[5].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[5].top_wins }">
+              {{playoff_ranking[5].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">{{playoff_ranking[5].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">
+              {{playoff_ranking[5].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[6].top_wins }">{{playoff_ranking[6].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[6].top_wins }">
+              {{playoff_ranking[6].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[6].top_wins }">{{playoff_ranking[6].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[6].top_wins }">
+              {{playoff_ranking[6].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
           </ul>
           <ul class="round round-3">
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[1].top_wins }">{{playoff_ranking[1].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[1].top_wins }">
+              {{playoff_ranking[1].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[1].top_wins }">{{playoff_ranking[1].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[1].top_wins }">
+              {{playoff_ranking[1].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top " v-bind:class="{ winner: playoff_ranking[2].top_wins }">{{playoff_ranking[2].top_name}}</li>
+            <li class="game game-top " v-bind:class="{ winner: playoff_ranking[2].top_wins }">
+              {{playoff_ranking[2].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">{{playoff_ranking[2].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">
+              {{playoff_ranking[2].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
           </ul>
           <ul class="round round-4">
             <li class="spacer">&nbsp;</li>
-            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[0].top_wins }">{{playoff_ranking[0].top_name}}</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[0].top_wins }">
+              {{playoff_ranking[0].top_name}}
+            </li>
             <li class="game game-spacer">&nbsp;</li>
-            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[0].top_wins }">{{playoff_ranking[0].bot_name}}</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[0].top_wins }">
+              {{playoff_ranking[0].bot_name}}
+            </li>
             <li class="spacer">&nbsp;</li>
           </ul>
         </main>
@@ -158,6 +218,10 @@
           datasets: [{}]
         },
         chartRegularPlayoff_loaded: false,
+        optionLineChart: {
+          responsive: true,
+          maintainAspectRatio: false
+        },
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -212,53 +276,54 @@
     },
     created() {
       this.fetchData()
-    },
+    }
+    ,
     watch: {
       // call again the method if the route changes
-      '$route': 'fetchData'
-    },
+      '$route':
+        'fetchData'
+    }
+    ,
     methods: {
       handleChange: function (e) {
         this.updateRadarChart();
         this.$forceUpdate();
-      },
+      }
+      ,
       fetchData() {
         console.log("Fetch data ...");
         // GET PLAYOFF REGULAR COMPARAISON
         this.updateRadarChart();
         this.updatePlayoffBracket();
         this.updateEvoChart()
-      },
-      updateEvoChart(){
-        console.log(this.$serverUrl + '/season/'+ this.current_saison+'/evolution')
-        axios.get(this.$serverUrl + '/season/'+ this.current_saison+'/evolution' )
+      }
+      ,
+      updateEvoChart() {
+        this.chartEvoData_loaded = false;
+        axios.get(this.$serverUrl + '/season/' + this.current_saison + '/evolution')
           .then(response => {
+            let values = []
+            let labels = []
+            for (let i = 0; i < 82; i++) {
+              labels[i] = i
+            }
 
-              let values = []
-
-              let labels = []
-              for(let i=0;i<82; i++) {
-                labels[i] = i
+            for (let res in response.data) {
+              let newvalue = {
+                data: response.data[res],
+                label: res,
+                borderColor: "#3e95cd",
+                backgroundColor: "#3e95cd",
+                fill: false
               }
-              
-              for(let res in response.data) {
-                let newvalue = {
-                  data: response.data[res],
-                  label: res,
-                  borderColor: "#3e95cd",
-                  backgroundColor: "#3e95cd",
-                  fill: false
-                }
-                values.push(newvalue)
-              }
-
-
-              //this.$set(this.chartEvoData, 'labels', labels);
-              this.$set(this.chartEvoData, 'datasets', values);
-              this.chartEvoData_loaded = true;
-              console.log(this.chartEvoData['labels'])
+              values.push(newvalue)
+            }
+            this.$set(this.chartEvoData, 'labels', labels);
+            this.$set(this.chartEvoData, 'datasets', values);
+            this.chartEvoData_loaded = true;
           })
-      },
+      }
+      ,
       updateRadarChart() {
         console.log("Updating chart.... " + this.current_saison);
         // GET PLAYOFF REGULAR COMPARAISON
@@ -357,17 +422,18 @@
             this.$set(this.chartRegularPlayoffData, 'labels', labels);
             this.chartRegularPlayoff_loaded = true;
           });// END AXIOS THEN
-      },
+      }
+      ,
       updatePlayoffBracket() {
         console.log("Updating playoff.... " + this.current_saison);
         //GET AVG NBR OF FIGHTS BY SEASON
         axios.get(this.$serverUrl + '/get_playoff/' + this.current_saison).then(response => {
-          console.log(response.data);
           this.playoff_ranking = response.data;
         }).catch(error => {
           console.log(error);
         });
-      },
+      }
+      ,
       updateAll() {
         this.updateRadarChart();
         this.updatePlayoffBracket();
