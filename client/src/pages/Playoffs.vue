@@ -41,6 +41,84 @@
         </card>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6" v-if="playoff_ranking.length > 0">
+        <main id="tournament">
+          <ul class="round round-1">
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[7].top_wins }">{{playoff_ranking[7].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[7].top_wins }">{{playoff_ranking[7].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[8].top_wins }">{{playoff_ranking[8].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[8].top_wins }">{{playoff_ranking[8].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[9].top_wins }">{{playoff_ranking[9].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[9].top_wins }">{{playoff_ranking[9].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[10].top_wins }">{{playoff_ranking[10].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[10].top_wins }">{{playoff_ranking[10].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[11].top_wins }">{{playoff_ranking[11].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[11].top_wins }">{{playoff_ranking[11].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[12].top_wins }">{{playoff_ranking[12].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[12].top_wins }">{{playoff_ranking[12].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[13].top_wins }">{{playoff_ranking[13].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[13].top_wins }">{{playoff_ranking[13].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[14].top_wins }">{{playoff_ranking[14].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[14].top_wins }">{{playoff_ranking[14].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+          </ul>
+          <ul class="round round-2">
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[3].top_wins }">{{playoff_ranking[3].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[3].top_wins }">{{playoff_ranking[3].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[4].top_wins }">{{playoff_ranking[4].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom " v-bind:class="{ winner: !playoff_ranking[4].top_wins }">{{playoff_ranking[4].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[5].top_wins }">{{playoff_ranking[5].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">{{playoff_ranking[5].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[6].top_wins }">{{playoff_ranking[6].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[6].top_wins }">{{playoff_ranking[6].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+          </ul>
+          <ul class="round round-3">
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[1].top_wins }">{{playoff_ranking[1].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[1].top_wins }">{{playoff_ranking[1].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top " v-bind:class="{ winner: playoff_ranking[2].top_wins }">{{playoff_ranking[2].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[2].top_wins }">{{playoff_ranking[2].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+          </ul>
+          <ul class="round round-4">
+            <li class="spacer">&nbsp;</li>
+            <li class="game game-top" v-bind:class="{ winner: playoff_ranking[0].top_wins }">{{playoff_ranking[0].top_name}}</li>
+            <li class="game game-spacer">&nbsp;</li>
+            <li class="game game-bottom" v-bind:class="{ winner: !playoff_ranking[0].top_wins }">{{playoff_ranking[0].bot_name}}</li>
+            <li class="spacer">&nbsp;</li>
+          </ul>
+        </main>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -59,6 +137,7 @@
         normalize: false,
         regularData: [],
         playoffData: [],
+        playoff_ranking: [],
         checkParams: ['Goal', 'Penalty', "Shot", "Hit", "Faceoff"],
         chartRegularPlayoffData: {
           labels: ["Moyenne de buts", "Mise en échecs", "Minutes de pénalités", "Nombre de tirs bloqués"],
@@ -93,9 +172,9 @@
           legend: {
             labels: {
               filter: function (item, chart) {
-                if(item.text.includes('1')){
+                if (item.text.includes('1')) {
                   return false
-                } else if(item.text.includes('2')) {
+                } else if (item.text.includes('2')) {
                   return false
                 }
                 return true
@@ -133,6 +212,7 @@
         console.log("Fetch data ...");
         // GET PLAYOFF REGULAR COMPARAISON
         this.updateRadarChart();
+        this.updatePlayoffBracket();
       },
       updateRadarChart() {
         console.log("Updating chart.... " + this.current_saison);
@@ -233,10 +313,84 @@
             this.chartRegularPlayoff_loaded = true;
           });// END AXIOS THEN
       },
+      updatePlayoffBracket() {
+        //GET AVG NBR OF FIGHTS BY SEASON
+        axios.get(this.$serverUrl + '/get_playoff/' + this.current_saison).then(response => {
+          console.log(response.data);
+          this.playoff_ranking = response.data;
+        }).catch(error => {
+          console.log(error);
+        });
+      }
     }
   }
 </script>
 
 <style scoped>
+  /*
+   *  Flex Layout Specifics
+  */
+  main {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .round {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .round .spacer {
+    flex-grow: 1;
+  }
+
+  .round .spacer:first-child,
+  .round .spacer:last-child {
+    flex-grow: .5;
+  }
+
+  .round .game-spacer {
+    flex-grow: 1;
+  }
+
+  /*
+   *  General Styles
+  */
+  body {
+    font-family: sans-serif;
+    font-size: small;
+    padding: 10px;
+    line-height: 1.4em;
+  }
+
+  li.game {
+    padding-left: 20px;
+  }
+
+  li.game.winner {
+    font-weight: bold;
+  }
+
+  li.game span {
+    float: right;
+    margin-right: 5px;
+  }
+
+  li.game-top {
+    border-bottom: 1px solid #aaa;
+  }
+
+  li.game-spacer {
+    border-right: 1px solid #aaa;
+    min-height: 40px;
+  }
+
+  li.game-bottom {
+    border-top: 1px solid #aaa;
+  }
 
 </style>
