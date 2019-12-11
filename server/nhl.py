@@ -11,6 +11,7 @@ games_collection = db['game']
 games_teams_collection = db['game_teams']
 skater_collection = db['shifts']
 players_collection = db['players']
+teams_collection = db['teams']
 
 seasons_to_eval = [20102011, 20112012, 20122013, 20132014, 20142015, 20152016, 20162017, 20172018, 20182019]
 number_of_games_per_season = [1319, 1316, 806, 1323, 1319, 1321, 1317, 1355, 1358]
@@ -626,7 +627,7 @@ def get_top_team_of_season(season):
             total_points += points
             points_evo.append(total_points)
 
-        result[team_id] = points_evo
+        result[team_name(team_id)] = points_evo
 
     return result
 
@@ -650,10 +651,10 @@ def get_team_evolution(season, team_id):
               "if": {
                 "$eq": ["$won", True]
               },
-              "then" : {
-                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 1, "else": 2 }
-                   },
-              "else" : 0
+              "then" : 2,
+              "else" : {
+                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 0, "else": 1 }
+                }
             }
           },
           "team_id": 1,
@@ -697,3 +698,6 @@ def get_playoff(season):
     with open(filename) as json_file:
         _json = json.load(json_file)
         return _json
+
+def team_name(team_id): 
+    return list(teams_collection.find({"team_id": team_id}))[0]['teamName']

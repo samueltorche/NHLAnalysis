@@ -22,7 +22,7 @@ import "vue-notifyjs/themes/default.css";
 
 Vue.use(PaperDashboard);
 //Vue.prototype.$serverUrl = "http://35.180.137.6:5000";
-Vue.prototype.$serverUrl = "http://127.0.0.1:5000";
+Vue.prototype.$serverUrl = "http://localhost:5000";
 
 /* eslint-disable no-new */
 new Vue({
