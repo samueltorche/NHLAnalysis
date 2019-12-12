@@ -30,12 +30,12 @@
     <div class="row">
       <div class="col-6">
         <card title="Evolution des buts des meilleurs joueurs" subTitle="">
-          <LineChart :chartdata="chartPlayerData" :options="options" v-if="chartPlayerData_loaded"/>
+          <LineChart :chartdata="chartPlayerData" :options="optionsButeurs" v-if="chartPlayerData_loaded"/>
         </card>
       </div>
       <div class="col-6">
         <card title="Evolution du temps de jeu des joueurs" subTitle="">
-          <LineChart :chartdata="chartPlayerTimeData" :options="options" v-if="chartPlayerTimeData_loaded"/>
+          <LineChart :chartdata="chartPlayerTimeData" :options="optionsTempsJeu" v-if="chartPlayerTimeData_loaded"/>
         </card>
       </div>
     </div>
@@ -92,7 +92,57 @@
         chartPenalties_loaded: false,
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Nombre moyen par match'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Saison'
+              }
+            }],
+          }
+        },
+        optionsButeurs: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Nombre de buts'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Saison'
+              }
+            }],
+          }
+        },
+        optionsTempsJeu: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Temps de jeu (en heure)'
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Saison'
+              }
+            }],
+          }
         },
         saisons_options: [
           {value: '2010', text: '2010-2011'},
@@ -252,29 +302,22 @@
 
         // GET PLAYERS STATS
         axios.get(this.$serverUrl + '/player_stats')
-        .then(response => {
+          .then(response => {
             let players_data = []
             let goals = []
             let timeOnIce = []
 
-            for(let s in response.data){
+            for (let s in response.data) {
               let players = response.data[s]
-              for(let p in players) {
+              for (let p in players) {
                 let player = players[p][0]
                 let pid = player['_id']
                 players_data[pid] = {
-                  "time": [], 
+                  "time": [],
                   "goals": [],
                   "color": ""
                 }
               }
-            }
-
-            var rcolor = function() {
-              var r = Math.floor(Math.random() * 255);
-              var g = Math.floor(Math.random() * 255);
-              var b = Math.floor(Math.random() * 255);
-              return "rgb(" + r + "," + g + "," + b + ")";
             }
 
             let colorBlindFriendly = [
@@ -287,13 +330,13 @@
               "rgb(204,121,167)"
             ];
 
-            for(let s in response.data){
+            for (let s in response.data) {
               let players = response.data[s]
               let i = 0;
-              for(let p in players) {
+              for (let p in players) {
                 let player = players[p][0]
                 let pid = player['_id']
-                players_data[pid]['time'].push(player['timeOnIce'])
+                players_data[pid]['time'].push(Math.round((player['timeOnIce']/3600)*100)/100)
                 players_data[pid]['color'] = colorBlindFriendly[i]
                 players_data[pid]['goals'].push(player['goals'])
                 i++;
@@ -303,7 +346,7 @@
             console.log(players_data)
 
             let datas = []
-            for(let p in players_data){
+            for (let p in players_data) {
               let player_data = players_data[p]
               let d = {
                 "data": player_data['goals'],
@@ -315,11 +358,11 @@
               datas.push(d)
             }
 
-            this.$set(this.chartPlayerData, 'datasets' , datas);
+            this.$set(this.chartPlayerData, 'datasets', datas);
             this.chartPlayerData_loaded = true;
 
             datas = []
-            for(let p in players_data){
+            for (let p in players_data) {
               let player_data = players_data[p]
               let d = {
                 "data": player_data['time'],
@@ -331,10 +374,10 @@
               datas.push(d)
             }
 
-            this.$set(this.chartPlayerTimeData, 'datasets' , datas);
+            this.$set(this.chartPlayerTimeData, 'datasets', datas);
             this.chartPlayerTimeData_loaded = true;
-            
-        })
+
+          })
       }
     }
   }
