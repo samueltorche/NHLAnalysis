@@ -25,7 +25,7 @@ def compare_playoff_season(plays, games, season):
         with open(filename) as json_file:
             _json = json.load(json_file)
             return _json
-
+    '''
     playoff = games.aggregate([
         {
             "$match":
@@ -290,10 +290,11 @@ def compare_playoff_season(plays, games, season):
         json.dump(_json, outfile)
 
     return (_json)
+    '''
 
 
 def get_season_goal_average(col):
-
+    '''
     res = col.aggregate([
         {
             "$match":
@@ -328,8 +329,18 @@ def get_season_goal_average(col):
 
         {"$sort": {"_id": 1}}
     ])
-
     return (list(res))
+    '''
+    data = [{"_id": 20102011, "game_count": 1230, "goals_count": 6870, "avg": 5.585365853658536},
+            {"_id": 20112012, "game_count": 1230, "goals_count": 6726, "avg": 5.46829268292683},
+            {"_id": 20122013, "game_count": 720, "goals_count": 3919, "avg": 5.4430555555555555},
+            {"_id": 20132014, "game_count": 1230, "goals_count": 6751, "avg": 5.4886178861788615},
+            {"_id": 20142015, "game_count": 1230, "goals_count": 6719, "avg": 5.46260162601626},
+            {"_id": 20152016, "game_count": 1230, "goals_count": 6672, "avg": 5.424390243902439},
+            {"_id": 20162017, "game_count": 1230, "goals_count": 6803, "avg": 5.53089430894309},
+            {"_id": 20172018, "game_count": 1271, "goals_count": 7552, "avg": 5.941778127458694},
+            {"_id": 20182019, "game_count": 1271, "goals_count": 7664, "avg": 6.029897718332022}]
+    return data
 
 
 def get_season_fights_average():
@@ -468,7 +479,7 @@ def get_player_details():
         with open(filename) as json_file:
             _json = json.load(json_file)
             return _json
-
+    '''
     best_players = [8471214, 8474564, 8474141, 8475166, 8470794]
     seasons = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
     res = {}
@@ -523,64 +534,80 @@ def get_player_details():
     with open(filename, 'w') as outfile:
         json.dump(res, outfile)
     return res
+    '''
+
+
+def get_playoff(season):
+    filename = "playoff_" + str(season) + ".json"
+    with open(filename) as json_file:
+        _json = json.load(json_file)
+        return _json
+    
 
 def get_top_team_of_season(season):
+    filename = 'topteam_' + season + ".json"
+    if os.path.exists(filename):
+        with open(filename) as json_file:
+            _json = json.load(json_file)
+            return _json
+
+    '''
     regx = re.compile("^" + season[:4], re.IGNORECASE)
     leaderboard = games_teams_collection.aggregate([
 
         {
             "$project": {
                 "game_id": 1,
-                "game_id_str": { "$toLower": "$game_id" },
+                "game_id_str": {"$toLower": "$game_id"},
                 "team_id": 1,
-                "points": { 
-            "$cond":{ 
-              "if": {
-                "$eq": ["$won", True]
-              },
-              "then" : 2,
-              "else" : {
-                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 0, "else": 1 }
+                "points": {
+                    "$cond": {
+                        "if": {
+                            "$eq": ["$won", True]
+                        },
+                        "then": 2,
+                        "else": {
+                            "$cond": {"if": {"$eq": ["$settled_in", "REG"]}, "then": 0, "else": 1}
+                        }
+                    }
                 }
-            }
-          }
             }
         },
         {
             "$match":
-            {
-                "game_id_str": {"$regex": regx}
-            }
+                {
+                    "game_id_str": {"$regex": regx}
+                }
         },
         {
             "$lookup":
-            {
-                "from": 'game',
-                "localField": 'game_id',
-                "foreignField": 'game_id',
-                "as": 'g'
-            }
+                {
+                    "from": 'game',
+                    "localField": 'game_id',
+                    "foreignField": 'game_id',
+                    "as": 'g'
+                }
         },
         {
             "$match":
-            {
-                "g.type": "R"
-            }
+                {
+                    "g.type": "R"
+                }
         },
         {
             "$group":
-            {
-              "_id": "$team_id",
-              "count": {
-                "$sum": "$points"
-              }
-            }
+                {
+                    "_id": "$team_id",
+                    "count": {
+                        "$sum": "$points"
+                    }
+                }
         },
         {
             "$sort":
-            {
-                "count" : -1
-            }
+                {
+                    "count": -1
+                }
         }])
 
     result = {}
@@ -597,76 +624,79 @@ def get_top_team_of_season(season):
 
         result[team_name(team_id)] = points_evo
 
+    with open('topteam_' + season + '.json', 'w') as outfile:
+        json.dump(result, outfile)
+
     return result
+    '''
 
 
+'''
 def get_team_evolution(season, team_id):
     print(season, team_id)
     regx = re.compile("^" + season[:4], re.IGNORECASE)
     evo = games_teams_collection.aggregate([
-    {
-        "$match":
         {
-            "team_id": int(team_id)
-        }
-    }, 
-    {
-        "$project": {
-          "game_id": 1,
-          "game_id_str": { "$toLower": "$game_id" },
-          "points": { 
-            "$cond":{ 
-              "if": {
-                "$eq": ["$won", True]
-              },
-              "then" : 2,
-              "else" : {
-                "$cond": { "if": { "$eq": [ "$settled_in", "REG" ] }, "then": 0, "else": 1 }
+            "$match":
+                {
+                    "team_id": int(team_id)
                 }
+        },
+        {
+            "$project": {
+                "game_id": 1,
+                "game_id_str": {"$toLower": "$game_id"},
+                "points": {
+                    "$cond": {
+                        "if": {
+                            "$eq": ["$won", True]
+                        },
+                        "then": 2,
+                        "else": {
+                            "$cond": {"if": {"$eq": ["$settled_in", "REG"]}, "then": 0, "else": 1}
+                        }
+                    }
+                },
+                "team_id": 1,
             }
-          },
-          "team_id": 1,
+        },
+        {
+            "$match": {
+                "game_id_str": {"$regex": regx}
+            }
+        },
+        {
+            "$lookup": {
+                "from": 'game',
+                "localField": 'game_id',
+                "foreignField": 'game_id',
+                "as": 'g'
+            }
+        },
+        {
+            "$match": {
+                "g.type": "R"
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "points": 1
+            }
+        },
+        {
+            "$sort": {
+                "game_id": 1
+            }
         }
-    },
-    {
-        "$match": {
-            "game_id_str": {"$regex": regx}
-        }
-    },
-    {
-        "$lookup": {
-            "from": 'game',
-            "localField": 'game_id',
-            "foreignField": 'game_id',
-            "as": 'g'
-        }
-    },
-    {
-        "$match": {
-            "g.type": "R"
-        }
-    },
-    {
-        "$project": {
-            "_id":1,
-            "points": 1
-        }
-    },
-    {
-        "$sort": {
-            "game_id": 1
-        }
-    }
     ])
 
     return list(evo)
+'''
 
-def get_playoff(season):
-    filename = "playoff_" + str(season) + ".json"
-    with open(filename) as json_file:
-        _json = json.load(json_file)
-        return _json
 
-def team_name(team_id): 
+'''
+def team_name(team_id):
     t = list(teams_collection.find({"team_id": team_id}))[0]
-    return t["shortName"] + " "+t['teamName']
+    return t["shortName"] + " " + t['teamName']
+'''

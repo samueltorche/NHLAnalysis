@@ -34,13 +34,8 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
-    
     return 'Hello World!'
 
-
-@app.route('/game_plays')
-def get_game_plays():
-    return game_plays_collection.find()
 
 @app.route('/game_plays/season/<year>')
 def get_game_plays_season(year):
@@ -56,6 +51,7 @@ def get_game_match(game_id):
 @app.route('/season/avg_goal')
 def get_season_avg_goal():
     data = nhl.get_season_goal_average(games_collection)
+    print(data)
     return json.dumps(data)
 
 
