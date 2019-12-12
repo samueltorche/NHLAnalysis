@@ -2,8 +2,9 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/evolution" name="Comparaison saisons" icon="ti-bar-chart"/>
-        <sidebar-link to="/playoffs" name="Comparaison playoffs" icon="ti-calendar"/>
+        <sidebar-link to="/home" name="Home" icon="ti-home"/>
+        <sidebar-link to="/evolution" name="Evolution des saisons" icon="ti-bar-chart"/>
+        <sidebar-link to="/playoffs" name="Régulier vs playoff" icon="ti-calendar"/>
       </template>
       <mobile-menu>
       </mobile-menu>

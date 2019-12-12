@@ -294,13 +294,14 @@ def compare_playoff_season(plays, games, season):
 
 def get_season_goal_average(col):
 
-    p = col.aggregate([
+    res = col.aggregate([
         {
-            "$match": 
+            "$match":
             {
-                "type" : "P"
+                "type": "P",
+                "type": "R"
             }
-        },  
+        },
 
         {
             "$group":
@@ -328,44 +329,7 @@ def get_season_goal_average(col):
         {"$sort": {"_id": 1}}
     ])
 
-    r = col.aggregate([
-        {
-            "$match": 
-            {
-                "type" : "R"
-            }
-        },  
-        {
-            "$group":
-                {
-                    "_id": "$season",
-                    "game_count": {"$sum": 1},
-                    "goals_count": {
-                        "$sum": {
-                            "$add": ["$away_goals", "$home_goals"]
-                        }
-                    }
-                }
-        },
-
-        {
-
-            "$project": {
-                "_id": 1,
-                "game_count": 1,
-                "goals_count": 1,
-                "avg": {"$divide": ["$goals_count", "$game_count"]}
-            }
-        },
-
-        {"$sort": {"_id": 1}}
-    ])
-
-    res = {
-        "R": list(r),
-        "P": list(p)
-    }
-    return (res)
+    return (list(res))
 
 
 def get_season_fights_average():

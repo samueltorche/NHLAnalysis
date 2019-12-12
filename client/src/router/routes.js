@@ -5,14 +5,19 @@ import NotFound from "@/pages/NotFoundPage.vue";
 // Admin pages
 import Saisons from "@/pages/Saisons.vue";
 import Playoffs from "@/pages/Playoffs.vue";
+import About from "@/pages/About.vue";
 
 const routes = [
   {
     path: "/",
     component: DashboardLayout,
-    redirect: "/evolution",
+    redirect: "/home",
     children: [
       {
+        path: "home",
+        name: "Home",
+        component: About
+      },{
         path: "evolution",
         name: "Saisons",
         component: Saisons

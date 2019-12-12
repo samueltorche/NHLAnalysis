@@ -4,7 +4,7 @@
       <nav>
         <ul>
           <li>
-            <router-link :to="{path:'/evolution'}">Home</router-link>
+            <router-link :to="{path:'/home'}">Home</router-link>
           </li>
         </ul>
       </nav>
