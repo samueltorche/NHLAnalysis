@@ -542,7 +542,7 @@ def get_playoff(season):
     with open(filename) as json_file:
         _json = json.load(json_file)
         return _json
-    
+
 
 def get_top_team_of_season(season):
     filename = 'topteam_' + season + ".json"
